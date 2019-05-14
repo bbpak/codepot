@@ -6,7 +6,7 @@ const BASE_API_URL = 'http://localhost:3000/'
 
 class App extends Component {
 	state = {
-		token: null
+		currentUser: null
 	}
 
 	componentDidMount() {
@@ -18,9 +18,7 @@ class App extends Component {
 			return memo
 		}, {})
 
-		this.setState({ token }, () => {
-			console.log(token)
-		})
+		localStorage.setItem('token', token)
 	}
 
 	handleLogIn = () => {

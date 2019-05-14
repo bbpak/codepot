@@ -1,7 +1,7 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 
-const authorizeUrl = 'https://github.com/login/oauth/authorize'
-const clientId = 'cfdfc439f3903950d3c7'
+const AUTH_URL = 'https://github.com/login/oauth/authorize'
+const CLIENT_ID = 'cfdfc439f3903950d3c7'
 
 class LoginForm extends Component {
 	handleLogIn() {
@@ -11,7 +11,7 @@ class LoginForm extends Component {
 	render() {
 		return (
 			<button onClick={this.handleLogin}>
-				<a href={`${authorizeUrl}?client_id=${clientId}`}>Log in with GitHub</a>
+				<a href={`${AUTH_URL}?client_id=${CLIENT_ID}`}>Log in with GitHub</a>
 			</button>
 		)
 	}
