@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import LoginForm from './components/forms/LoginForm'
+import ProjectList from './components/containers/ProjectList'
 import './App.css'
 
 const BASE_API_URL = 'http://localhost:3000/'
@@ -29,7 +30,8 @@ class App extends Component {
 		return (
 			<div className='App'>
 				<main>
-					<LoginForm handleLogIn={this.handleLogIn} />
+					{/* <LoginForm handleLogIn={this.handleLogIn} /> */}
+					<ProjectList />
 				</main>
 			</div>
 		)

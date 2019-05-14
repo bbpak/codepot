@@ -4,3 +4,10 @@ export const logInUser = (user) => {
 		payload: user
 	}
 }
+
+export const selectProject = (project) => {
+	return {
+		type: 'SELECT_PROJECT',
+		payload: project
+	}
+}

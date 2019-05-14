@@ -1,18 +1,20 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import './index.css'
-import App from './App'
-import * as serviceWorker from './serviceWorker'
-import { loadState, saveState } from './localStorage'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
+import App from './App'
+import { loadState, saveState } from './localStorage'
+import reducers from './reducers'
+import './index.css'
+import * as serviceWorker from './serviceWorker'
 
 const persistedState = loadState()
-const store = createStore(persistedState)
+const store = createStore(reducers, persistedState)
 
 store.subscribe(() => {
 	saveState({ currentUser: store.getState().currentUser })
 })
+
 ReactDOM.render(
 	<Provider store={store}>
 		<App />
