@@ -2,12 +2,15 @@ import React, { Component } from 'react'
 import LoginForm from './components/forms/LoginForm'
 import './App.css'
 
+const BASE_API_URL = 'http://localhost:3000/'
+
 class App extends Component {
 	state = {
 		token: null
 	}
 
 	componentDidMount() {
+		// Parse code from URL
 		const query = window.location.search.substring(1)
 		const pairs = query.split('&').map((str) => str.split('='))
 		const token = pairs.reduce((memo, pair) => {
@@ -21,7 +24,7 @@ class App extends Component {
 	}
 
 	handleLogIn = () => {
-		fetch('https://localhost:3000/auth/github')
+		fetch(BASE_API_URL + 'auth/github')
 	}
 
 	render() {

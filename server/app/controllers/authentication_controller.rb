@@ -11,8 +11,7 @@ class AuthenticationController < ApplicationController
 
     # ... create user if it doesn't exist...
     User.where(login: login).first_or_create!(
-      name: name,
-      avatar_url: avatar_url
+     
     )
     
     # ... and redirect to client app.

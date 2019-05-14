@@ -12,7 +12,7 @@ class Authenticator
 
     {
       issuer: ENV['CLIENT_URL'],
-      login: user_info_resp['login']
+      login: user_resp['login']
     }
   end
 
