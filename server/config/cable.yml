@@ -1,8 +1,8 @@
 development:
-  adapter: pg
+  adapter: async
 
 test:
-  adapter: pg
+  adapter: async
 
 production:
   adapter: redis

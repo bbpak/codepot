@@ -1,32 +1,28 @@
 import React, { Component } from 'react'
-import { clientId, clientSecret } from './keys'
-import LoginForm from 'LoginForm'
+import LoginForm from './components/forms/LoginForm'
 import './App.css'
 
 class App extends Component {
 	state = {
-		status: '',
 		token: null
 	}
 
 	componentDidMount() {
-		const code = window.location.href.match(/?code=(.*)/) && window.location.href.match(/?code=(.*)/)[1]
-		console.log(code)
+		const query = window.location.search.substring(1)
+		const pairs = query.split('&').map((str) => str.split('='))
+		const token = pairs.reduce((memo, pair) => {
+			memo[pair[0]] = pair[1]
+			return memo
+		}, {})
 
-		if (code) {
-			this.setState({ status: 'loading' })
-			fetch(`https://localhost:3000/authenticate/${code}`)
-				.then((response) => response.json())
-				.then(({ token }) => {
-					this.setState({
-						token,
-						status: 'loaded'
-					})
-				})
-		}
+		this.setState({ token }, () => {
+			console.log(token)
+		})
 	}
 
-	handleLogIn = () => {}
+	handleLogIn = () => {
+		fetch('https://localhost:3000/auth/github')
+	}
 
 	render() {
 		return (
