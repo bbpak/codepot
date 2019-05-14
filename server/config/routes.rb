@@ -9,4 +9,6 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  get '/auth/github', to: 'authentication#github', format: false
 end

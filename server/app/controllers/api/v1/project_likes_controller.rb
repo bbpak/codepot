@@ -1,5 +1,6 @@
 class Api::V1::ProjectLikesController < ApplicationController
   before_action :find_project_like, only: [:update]
+  before_action :authenticate_user!
   
   def index
     @project_likes = ProjectLike.where(project_id: params[:project_id])

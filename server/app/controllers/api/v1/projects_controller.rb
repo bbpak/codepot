@@ -1,5 +1,6 @@
 class Api::V1::ProjectsController < ApplicationController
   before_action :find_project, only: [:update]
+  before_action :authenticate_user!
   
   def index
     @projects = Project.all

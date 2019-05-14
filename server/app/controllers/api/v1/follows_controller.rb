@@ -1,9 +1,10 @@
 class Api::V1::FollowsController < ApplicationController
   before_action :find_follow, only: [:update]
+  before_action :authenticate_user!
   
   def index
-    @follows = Follow.where(followed_id: params[:artist_id])
-                .or(Follow.where(follower_id: params[:artist_id]))
+    @follows = Follow.where(followed_id: params[:user_id])
+                .or(Follow.where(follower_id: params[:user_id]))
     render json: @follows
   end
 
