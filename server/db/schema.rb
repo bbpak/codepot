@@ -54,6 +54,7 @@ ActiveRecord::Schema.define(version: 2019_05_13_185109) do
   create_table "users", force: :cascade do |t|
     t.string "username"
     t.string "name"
+    t.integer "github_id"
     t.integer "tokens"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

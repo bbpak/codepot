@@ -8,22 +8,19 @@ class AuthenticationController < ApplicationController
 
     # Generate token...
     token = Tokenizer.encode(login)
-
+    # cookies[:token] = token
+    
     # ... create user if it doesn't exist...
-    User.where(login: login).first_or_create!(
-     
+    User.find_or_create_by!(
+      username: login,
+      name: user_info[:name],
+      github_id: user_info[:github_id]
     )
     
     # ... and redirect to client app.
-    redirect_to "#{issuer}?token=#{token}"
+    redirect_to "#{ENV['CLIENT_URL']}"
     
     rescue StandardError => error
-      redirect_to "#{issuer}?error=#{error.message}"
-  end
-
-  private
-
-  def issuer
-    ENV['CLIENT_URL']
+      redirect_to "#{ENV['CLIENT_URL']}?error=#{error.message}"
   end
 end

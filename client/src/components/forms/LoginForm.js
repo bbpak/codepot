@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 
 const AUTH_URL = 'https://github.com/login/oauth/authorize'
 const CLIENT_ID = 'cfdfc439f3903950d3c7'
+const SCOPE = 'read:user'
 
 class LoginForm extends Component {
 	handleLogIn() {

@@ -10,17 +10,17 @@ class App extends Component {
 		currentUser: null
 	}
 
-	componentDidMount() {
-		// Parse code from URL
-		const query = window.location.search.substring(1)
-		const pairs = query.split('&').map((str) => str.split('='))
-		const token = pairs.reduce((memo, pair) => {
-			memo[pair[0]] = pair[1]
-			return memo
-		}, {})
+	// componentDidMount() {
+	// 	// Parse code from URL
+	// 	const query = window.location.search.substring(1)
+	// 	const pairs = query.split('&').map((str) => str.split('='))
+	// 	const token = pairs.reduce((memo, pair) => {
+	// 		memo[pair[0]] = pair[1]
+	// 		return memo
+	// 	}, {})
 
-		localStorage.setItem('token', token)
-	}
+	// 	localStorage.setItem('token', token)
+	// }
 
 	handleLogIn = () => {
 		fetch(BASE_API_URL + 'auth/github')
@@ -30,7 +30,7 @@ class App extends Component {
 		return (
 			<div className='App'>
 				<main>
-					{/* <LoginForm handleLogIn={this.handleLogIn} /> */}
+					<LoginForm handleLogIn={this.handleLogIn} />
 					<ProjectList />
 				</main>
 			</div>

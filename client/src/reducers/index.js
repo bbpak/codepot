@@ -1,5 +1,9 @@
 import { combineReducers } from 'redux'
 
+const currentUserReducer = (currentUser = null, action) => {
+	return currentUser
+}
+
 const projectsReducer = (projects = [], action) => {
 	return [ { name: 1 }, { name: 2 }, { name: 3 } ]
 }
@@ -14,6 +18,7 @@ const selectedProjectReducer = (selectedProject = null, action) => {
 }
 
 export default combineReducers({
+	currentUser: currentUserReducer,
 	projects: projectsReducer,
 	selectedProject: selectedProjectReducer
 })

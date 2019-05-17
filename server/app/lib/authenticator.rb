@@ -9,10 +9,12 @@ class Authenticator
     access_token_resp = fetch_github_access_token(code)
     access_token = access_token_resp['access_token']
     user_resp = fetch_github_user(access_token)
-
+    
     {
       issuer: ENV['CLIENT_URL'],
-      login: user_resp['login']
+      login: user_resp['login'],
+      name: user_resp['name'],
+      id: user_resp['id']
     }
   end
 
