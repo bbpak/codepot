@@ -33,8 +33,8 @@ module ProjServer
     config.api_only = true
 
     # Enable cookies
-    # config.middleware.use ActionDispatch::Cookies
-    # config.middleware.use ActionDispatch::Session::CookieStore, key: '_namespace_key'
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use ActionDispatch::Session::CookieStore
 
     config.before_configuration do
       env_file = File.join(Rails.root, 'config', 'local_env.yml')

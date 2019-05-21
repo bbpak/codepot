@@ -1,13 +1,13 @@
-export const logInUser = (user) => {
+export const setCurrentUser = (currentUser) => {
 	return {
-		type: 'LOG_IN',
-		payload: user
+		type: 'SET_CURRENT_USER',
+		currentUser
 	}
 }
 
 export const selectProject = (project) => {
 	return {
 		type: 'SELECT_PROJECT',
-		payload: project
+		project
 	}
 }

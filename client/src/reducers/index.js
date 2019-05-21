@@ -1,17 +1,22 @@
 import { combineReducers } from 'redux'
 
 const currentUserReducer = (currentUser = null, action) => {
-	return currentUser
+	switch (action.type) {
+		case 'SET_CURRENT_USER':
+			return action.currentUser
+		default:
+			return currentUser
+	}
 }
 
 const projectsReducer = (projects = [], action) => {
-	return [ { name: 1 }, { name: 2 }, { name: 3 } ]
+	return projects
 }
 
 const selectedProjectReducer = (selectedProject = null, action) => {
 	switch (action.type) {
 		case 'SELECT_PROJECT':
-			return action.payload
+			return action.project
 		default:
 			return selectedProject
 	}
