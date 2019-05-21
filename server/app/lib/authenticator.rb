@@ -14,6 +14,7 @@ class Authenticator
       issuer: ENV['CLIENT_URL'],
       login: user_resp['login'],
       name: user_resp['name'],
+      created_at: user_resp["created_at"],
       github_id: user_resp['id']
     }
   end

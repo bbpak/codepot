@@ -4,7 +4,9 @@ import { connect } from 'react-redux'
 import { setCurrentUser } from './actions'
 import ProjectList from './components/containers/ProjectList'
 import './App.css'
-import NavBar from './components/NavBar'
+import NavBar from './components/navbar/NavBar'
+
+window._API_URL_ = 'http://localhost:3000/'
 
 const App = (props) => {
 	useEffect(() => {

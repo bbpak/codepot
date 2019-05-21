@@ -11,4 +11,5 @@ Rails.application.routes.draw do
   end
 
   get '/auth/github', to: 'authentication#github', format: false
+  get '/signout', to: 'authentication#signout'
 end

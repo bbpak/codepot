@@ -18,12 +18,10 @@ class AuthenticationController < ApplicationController
       github_id: user_info[:github_id]
     )
 
-    # Store user data in cookies and acces from client
+    # Store user data in cookies and access from client
     cookies[:current_user] = {
       id: user.id,
       username: user.username,
-      name: user.name,
-      avatar_url: user_info[:avatar_url],
       github_id: user.github_id,
       auth_token: token
     }.to_json
@@ -33,5 +31,10 @@ class AuthenticationController < ApplicationController
 
     rescue StandardError => error
       redirect_to "#{ENV['CLIENT_URL']}/#{error}"
+  end
+
+  def signout
+    cookies[:current_user] = nil
+    @current_user = nil
   end
 end
