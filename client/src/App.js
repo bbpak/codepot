@@ -23,7 +23,7 @@ const App = () => {
 			}
 			if (c.indexOf(key) === 0) {
 				const json = JSON.parse(c.substring(key.length, c.length))
-				json.name.replace(/\+/g, ' ')
+				json.name && json.name.replace(/\+/g, ' ')
 				return json
 			}
 		}
