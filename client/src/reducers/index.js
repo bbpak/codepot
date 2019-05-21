@@ -1,8 +1,9 @@
 import { combineReducers } from 'redux'
+import { actionTypes } from '../actions'
 
 const currentUserReducer = (currentUser = null, action) => {
 	switch (action.type) {
-		case 'SET_CURRENT_USER':
+		case actionTypes.SET_CURRENT_USER:
 			return action.currentUser
 		default:
 			return currentUser
@@ -15,7 +16,7 @@ const projectsReducer = (projects = [], action) => {
 
 const selectedProjectReducer = (selectedProject = null, action) => {
 	switch (action.type) {
-		case 'SELECT_PROJECT':
+		case actionTypes.SELECT_PROJECT:
 			return action.project
 		default:
 			return selectedProject

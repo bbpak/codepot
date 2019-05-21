@@ -1,34 +1,30 @@
 import React, { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
-import LoginForm from './components/forms/LoginForm'
+import LoginForm from './components/forms/LoginButton'
 import ProjectList from './components/containers/ProjectList'
 import './App.css'
-
-window._API_URL_ = 'http://localhost:3000/'
+import NavBar from './components/NavBar'
 
 const App = () => {
-	const [ currUser ] = useState(null)
+	const [ currUser, setCurrUser ] = useState(null)
 
 	useEffect(() => {
-		const query = window.location.search.substring(1)
-		const pairs = query.split('&').map((str) => str.split('='))
-		const data = pairs.reduce((memo, pair) => {
-			memo[pair[0]] = pair[1]
-			return memo
-		}, {})
-	})
+		setCurrUser(getUserFromCookies('current_user'))
+	}, [])
 
-	const getCookie = (cname) => {
-		var name = cname + '='
-		var decodedCookie = decodeURIComponent(document.cookie)
-		var ca = decodedCookie.split(';')
+	const getUserFromCookies = () => {
+		const key = 'current_user='
+		const decodedCookie = decodeURIComponent(document.cookie)
+		const ca = decodedCookie.split(';')
 		for (var i = 0; i < ca.length; i++) {
 			var c = ca[i]
 			while (c.charAt(0) === ' ') {
 				c = c.substring(1)
 			}
-			if (c.indexOf(name) === 0) {
-				return JSON.parse(c.substring(name.length, c.length))
+			if (c.indexOf(key) === 0) {
+				const json = JSON.parse(c.substring(key.length, c.length))
+				json.name.replace(/\+/g, ' ')
+				return json
 			}
 		}
 		return ''
@@ -38,9 +34,9 @@ const App = () => {
 
 	return (
 		<Router>
-			<div className='App'>
+			<div classkey='App'>
+				<NavBar />
 				<main>
-					<LoginForm handleLogIn={handleLogIn} />
 					<ProjectList />
 				</main>
 			</div>
