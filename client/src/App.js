@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
-import LoginForm from './components/forms/LoginButton'
+import { connect } from 'react-redux'
+import { setCurrentUser } from './actions'
 import ProjectList from './components/containers/ProjectList'
 import './App.css'
 import NavBar from './components/NavBar'
 
-const App = () => {
-	const [ currUser, setCurrUser ] = useState(null)
-
+const App = (props) => {
 	useEffect(() => {
-		setCurrUser(getUserFromCookies('current_user'))
+		// Set current user from cookies after login
+		!props.currentUser && props.setCurrentUser(getUserFromCookies('current_user'))
 	}, [])
 
 	const getUserFromCookies = () => {
@@ -44,4 +44,9 @@ const App = () => {
 	)
 }
 
-export default App
+const mapStateToProps = (state) => {
+	return {
+		currentUser: state.currentUser
+	}
+}
+export default connect(mapStateToProps, { setCurrentUser })(App)

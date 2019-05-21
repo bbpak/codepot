@@ -1,18 +1,11 @@
-const SET_CURRENT_USER = 'SET_CURRENT_USER'
-const SET_PROJECTS = 'SET_PROJECTS'
-const SELECT_PROJECT = 'SELECT_PROJECT'
+const SET_CURRENT_USER = Symbol()
+const SET_PROJECTS = Symbol()
+const SELECT_PROJECT = Symbol()
 
 export const setCurrentUser = (currentUser) => {
 	return {
 		type: SET_CURRENT_USER,
 		currentUser
-	}
-}
-
-export const setProjects = (projects) => {
-	return {
-		type: SET_PROJECTS,
-		projects
 	}
 }
 

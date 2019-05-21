@@ -8,12 +8,12 @@ import reducers from './reducers'
 import './index.css'
 import * as serviceWorker from './serviceWorker'
 
-const persistedState = loadState()
-const store = createStore(reducers, persistedState)
+// const persistedState = loadState()
+const store = createStore(reducers)
 
-store.subscribe(() => {
-	saveState({ currentUser: store.getState().currentUser })
-})
+// store.subscribe(() => {
+// 	saveState({ currentUser: store.getState().currentUser })
+// })
 
 ReactDOM.render(
 	<Provider store={store}>

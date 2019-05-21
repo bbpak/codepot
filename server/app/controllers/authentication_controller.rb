@@ -21,9 +21,12 @@ class AuthenticationController < ApplicationController
     # Store user data in cookies and acces from client
     cookies[:current_user] = {
       id: user.id,
+      username: user.username,
+      name: user.name,
+      avatar_url: user_info[:avatar_url],
       github_id: user.github_id,
       auth_token: token
-    }
+    }.to_json
 
     # ... and redirect to client app.
     redirect_to "#{ENV['CLIENT_URL']}/"
