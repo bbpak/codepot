@@ -16,8 +16,6 @@ const App = () => {
 			memo[pair[0]] = pair[1]
 			return memo
 		}, {})
-
-		console.log(getCookie('user'))
 	})
 
 	const getCookie = (cname) => {
@@ -26,11 +24,11 @@ const App = () => {
 		var ca = decodedCookie.split(';')
 		for (var i = 0; i < ca.length; i++) {
 			var c = ca[i]
-			while (c.charAt(0) == ' ') {
+			while (c.charAt(0) === ' ') {
 				c = c.substring(1)
 			}
-			if (c.indexOf(name) == 0) {
-				return c.substring(name.length, c.length)
+			if (c.indexOf(name) === 0) {
+				return JSON.parse(c.substring(name.length, c.length))
 			}
 		}
 		return ''

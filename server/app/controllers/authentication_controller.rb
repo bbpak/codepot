@@ -19,7 +19,7 @@ class AuthenticationController < ApplicationController
     )
 
     # Store user data in cookies and acces from client
-    cookies[:user] = user.to_json
+    cookies[:current_user] = user.to_json
 
     # ... and redirect to client app.
     redirect_to "#{ENV['CLIENT_URL']}/"
