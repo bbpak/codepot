@@ -10,6 +10,9 @@ const NavBar = ({ currentUser }) => {
 
 	return (
 		<Menu id='nav-bar' secondary borderless>
+			<Menu.Menu position='left'>
+				<p>codepot</p>
+			</Menu.Menu>
 			<Menu.Menu position='right'>
 				<Menu.Item>{isLoggedIn ? <ProfileDropdown currentUser={currentUser} /> : <LoginButton />}</Menu.Item>
 			</Menu.Menu>
