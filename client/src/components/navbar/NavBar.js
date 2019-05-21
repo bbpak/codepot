@@ -3,12 +3,13 @@ import { Menu } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import LoginButton from './LoginButton'
 import ProfileDropdown from './ProfileDropdown'
+import '../styles/navbar.css'
 
 const NavBar = ({ currentUser }) => {
 	const isLoggedIn = !!currentUser
 
 	return (
-		<Menu borderless>
+		<Menu id='nav-bar' secondary borderless>
 			<Menu.Menu position='right'>
 				<Menu.Item>{isLoggedIn ? <ProfileDropdown currentUser={currentUser} /> : <LoginButton />}</Menu.Item>
 			</Menu.Menu>

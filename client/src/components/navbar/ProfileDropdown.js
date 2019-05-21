@@ -1,5 +1,5 @@
 import React from 'react'
-import { Dropdown, Image } from 'semantic-ui-react'
+import { Dropdown } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { setCurrentUser } from '../../actions'
 
@@ -13,10 +13,10 @@ const ProfileDropdown = ({ currentUser, setCurrentUser }) => {
 	}
 
 	const trigger = (
-		<span>
-			{currentUser.username}
-			<Image src={`https://avatars2.githubusercontent.com/u/${currentUser.github_id}?v=4`} circular size='mini' />
-		</span>
+		<div className='profile-dd'>
+			<span>{currentUser.username}</span>
+			<img src={`https://avatars2.githubusercontent.com/u/${currentUser.github_id}?v=4`} alt='avatar' />
+		</div>
 	)
 
 	const options = [ { key: 'sign-out', text: 'Sign Out', icon: 'sign out', onClick: handleSignOut } ]
