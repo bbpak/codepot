@@ -33,7 +33,7 @@ class Api::ProjectsController < ApplicationController
   private
   
   def project_params
-    params.permit!
+    params.require(:project).permit!
   end
   
   def find_project

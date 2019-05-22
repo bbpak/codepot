@@ -6,7 +6,8 @@ class CreateProjects < ActiveRecord::Migration[5.2]
       t.string :project_url
       t.string :cover_image_url
       t.integer :user_id
-
+      t.string :language
+      
       t.timestamps
     end
   end

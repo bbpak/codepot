@@ -42,6 +42,7 @@ ActiveRecord::Schema.define(version: 2019_05_13_185109) do
     t.string "project_url"
     t.string "cover_image_url"
     t.integer "user_id"
+    t.string "language"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

@@ -93,14 +93,14 @@ const ProjectForm = (props) => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
-
+		console.log(inputs)
 		// Create project
 		fetch(window._API_URL_ + 'projects', {
 			method: 'POST',
 			headers: {
 				Accept: 'application/json',
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${props.currentUser.token}`
+				'Content-Type': 'application/json'
+				// Authorization: `Bearer ${props.currentUser.token}`
 			},
 			body: JSON.stringify(inputs)
 		})

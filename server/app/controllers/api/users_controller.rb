@@ -15,15 +15,15 @@ class Api::UsersController < ApplicationController
   end
   
   def update
-    if @current_user.update(user_params)
-      render json: @current_user, status: :accepted
+    if @user.update(user_params)
+      render json: @user, status: :accepted
     else
-      render json: { errors: @current_user.errors.full_messages }, status: :unprocessible_entity
+      render json: { errors: @user.errors.full_messages }, status: :unprocessible_entity
     end
   end
 
   def destroy
-    @current_user.destroy
+    @user.destroy
   end
   
   private
