@@ -8,6 +8,9 @@ import reducers from './reducers'
 import './index.css'
 import * as serviceWorker from './serviceWorker'
 
+// Environment variables
+require('dotenv').config()
+
 // const persistedState = loadState()
 const store = createStore(reducers)
 

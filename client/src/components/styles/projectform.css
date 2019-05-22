@@ -1,14 +1,19 @@
+.project-form-container {
+	height: 100%;
+}
+
 .project-form {
 	display: flex;
+	flex-wrap: wrap;
 }
 
 .project-form-image,
 .project-form-details {
-	padding: 3em;
+	min-width: 25em;
 	flex: 1;
+	padding: 3em;
 }
 
 .project-form-buttons {
-	padding: 3em;
 	float: right;
 }

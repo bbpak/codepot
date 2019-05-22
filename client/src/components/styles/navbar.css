@@ -1,12 +1,13 @@
 #nav-bar {
-	background: white;
-	color: black;
+	background-color: rgb(32, 18, 65);
+	color: white;
 	height: 50px;
 }
 
 #nav-bar p {
 	line-height: 50px;
 	vertical-align: middle;
+	color: white;
 }
 
 .profile-dd {
@@ -15,6 +16,7 @@
 }
 
 .profile-dd span {
+	color: white;
 	vertical-align: middle;
 	line-height: 40px;
 	margin: 0 0.5em 0 0.5em;

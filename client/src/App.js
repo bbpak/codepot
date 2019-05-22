@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { Container } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { setCurrentUser } from './actions'
 import ProjectList from './components/containers/ProjectList'
@@ -10,11 +11,6 @@ import ProjectForm from './components/forms/ProjectForm'
 window._API_URL_ = 'http://localhost:3000/'
 
 const App = (props) => {
-	useEffect(() => {
-		// Set current user from cookies after login
-		!props.currentUser && props.setCurrentUser(getUserFromCookies('current_user'))
-	}, [])
-
 	const getUserFromCookies = () => {
 		const key = 'current_user='
 		const decodedCookie = decodeURIComponent(document.cookie)
@@ -33,14 +29,17 @@ const App = (props) => {
 		return ''
 	}
 
+	// Set current user from cookies after login
+	!props.currentUser && props.setCurrentUser(getUserFromCookies('current_user'))
+
 	return (
 		<Router>
-			<div classkey='App'>
+			<div classkey='App' className='App'>
 				<NavBar />
-				<main>
+				<Container>
 					{props.currentUser && <ProjectForm />}
 					<ProjectList />
-				</main>
+				</Container>
 			</div>
 		</Router>
 	)

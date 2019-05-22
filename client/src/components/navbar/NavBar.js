@@ -11,7 +11,9 @@ const NavBar = ({ currentUser }) => {
 	return (
 		<Menu id='nav-bar' secondary borderless>
 			<Menu.Menu position='left'>
-				<p>codepot</p>
+				<Menu.Item>
+					<p>codepot</p>
+				</Menu.Item>
 			</Menu.Menu>
 			<Menu.Menu position='right'>
 				<Menu.Item>{isLoggedIn ? <ProfileDropdown currentUser={currentUser} /> : <LoginButton />}</Menu.Item>
