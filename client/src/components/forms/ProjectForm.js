@@ -98,7 +98,9 @@ const ProjectForm = (props) => {
 		fetch(window._API_URL_ + 'projects', {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/json'
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${props.currentUser.token}`
 			},
 			body: JSON.stringify(inputs)
 		})

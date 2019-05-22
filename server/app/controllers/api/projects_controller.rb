@@ -1,6 +1,6 @@
 class Api::ProjectsController < ApplicationController
   before_action :find_project, only: [:update]
-  before_action :authenticate_user!
+  # before_action :authenticate_user!
   
   def index
     @projects = Project.all
@@ -33,7 +33,7 @@ class Api::ProjectsController < ApplicationController
   private
   
   def project_params
-    params.permit(:name, :github_url, :project_id)
+    params.permit!
   end
   
   def find_project

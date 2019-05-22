@@ -9,7 +9,7 @@ class AuthenticationController < ApplicationController
     login = user_info[:login]
 
     # Generate token...
-    # token = Tokenizer.encode(login)
+    token = Tokenizer.encode(login)
     
     # ... create user if it doesn't exist...
     user = User.find_or_create_by!(
@@ -22,7 +22,8 @@ class AuthenticationController < ApplicationController
     cookies[:current_user] = {
       id: user.id,
       username: user.username,
-      github_id: user.github_id
+      github_id: user.github_id,
+      token: token
     }.to_json
 
     # ... and redirect to client app.

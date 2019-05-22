@@ -1,6 +1,6 @@
 class Api::FollowsController < ApplicationController
   before_action :find_follow, only: [:update]
-  before_action :authenticate_user!
+  # before_action :authenticate_user!
   
   def index
     @follows = Follow.where(followed_id: params[:user_id])
