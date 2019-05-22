@@ -57,7 +57,7 @@ const ProjectForm = (props) => {
 						// To pre-fill form with selected repo
 						reposData[repo.name] = {
 							name: namify(repo.name),
-							repoUrl: repo.html_url,
+							repo_url: repo.html_url,
 							language: repo.language
 						}
 					}
@@ -100,8 +100,10 @@ const ProjectForm = (props) => {
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify(inputs).then((res) => res.json()).then((data) => console.log(data))
+			body: JSON.stringify(inputs)
 		})
+			.then((res) => res.json())
+			.then((data) => console.log(data))
 	}
 
 	return (
@@ -139,7 +141,7 @@ const ProjectForm = (props) => {
 						<Form.Field>
 							<Form.Input
 								label='Repo URL'
-								name='repoUrl'
+								name='repo_url'
 								placeholder='repository URL'
 								value={inputs['repo_url']}
 								onChange={handleInputChange}
@@ -148,7 +150,7 @@ const ProjectForm = (props) => {
 						<Form.Field>
 							<Form.Input
 								label='Project URL'
-								name='projUrl'
+								name='project_url'
 								placeholder='project URL'
 								value={inputs['project_url']}
 								onChange={handleInputChange}

@@ -38,7 +38,9 @@ ActiveRecord::Schema.define(version: 2019_05_13_185109) do
 
   create_table "projects", force: :cascade do |t|
     t.string "name"
-    t.string "github_url"
+    t.string "repo_url"
+    t.string "project_url"
+    t.string "cover_image_url"
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

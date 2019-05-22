@@ -8,7 +8,7 @@ import './App.css'
 import NavBar from './components/navbar/NavBar'
 import ProjectForm from './components/forms/ProjectForm'
 
-window._API_URL_ = 'http://localhost:3000/'
+window._API_URL_ = 'http://localhost:3000/api/'
 
 const App = (props) => {
 	const getUserFromCookies = () => {

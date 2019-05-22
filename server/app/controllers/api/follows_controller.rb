@@ -1,4 +1,4 @@
-class Api::V1::FollowsController < ApplicationController
+class Api::FollowsController < ApplicationController
   before_action :find_follow, only: [:update]
   before_action :authenticate_user!
   

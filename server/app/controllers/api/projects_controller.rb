@@ -1,4 +1,4 @@
-class Api::V1::ProjectsController < ApplicationController
+class Api::ProjectsController < ApplicationController
   before_action :find_project, only: [:update]
   before_action :authenticate_user!
   
