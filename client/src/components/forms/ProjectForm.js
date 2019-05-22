@@ -4,15 +4,62 @@ import { Form, Dropdown, Button } from 'semantic-ui-react'
 import ImageUploader from 'react-images-upload'
 import '../styles/projectform.css'
 
+// const graphql = require('@octokit/graphql')
+
 const ProjectForm = (props) => {
-	const [ inputs, setInputs, repos, setRepos ] = useState({})
-	const { currentUser: { username, auth_token } } = props
+	const [ inputs, setInputs ] = useState({})
+	const [ repos, setRepos ] = useState([])
+	const [ selectedRepo, setSelectedRepo ] = useState(null)
+	const { currentUser: { username } } = props
+
+	// Replace _, -, camelCase with whitespace for legible name
+	const namify = (text) => {
+		return (
+			text
+				// replace - and _
+				.replace(/([-|_])/g, ' ')
+				// insert a space before all caps
+				.replace(/([A-Z])/g, ' $1')
+				// uppercase the first character
+				.replace(/^./, function(str) {
+					return str.toUpperCase()
+				})
+		)
+	}
 
 	useEffect(() => {
-		const reposURL = `https://api.github.com/users/${username}/repos/`
+		const reposURL = `https://api.github.com/users/${username}/repos?sort=updated&per_page=100`
+		let repos = []
 
-		// Fetch user's github repos with token
-		fetch(reposURL, {}).then((res) => res.json()).then((data) => console.log(data))
+		// Go through 300 repos, 100 per page limit
+		// For FI students with a ton of labs... Switch to GraphQL stretch goal
+		for (let i = 1; i <= 3; i++) {
+			// Fetch user's public github repos
+			fetch(reposURL + `&page=${i}`).then((res) => res.json()).then((data) => {
+				// For-loop instead of forEach so I can break
+				// Filter only relevant properties
+				for (let j = 0; j < data.length; j++) {
+					const repo = data[j]
+					if (!repo.fork) {
+						if (repos.includes(repo)) break
+
+						repos.push({
+							key: j,
+							text: repo.name,
+							value: repo.name,
+							data: {
+								name: namify(repo.name),
+								repoUrl: repo.html_url,
+								language: repo.language
+							}
+						})
+					}
+				}
+
+				// Don't include forks
+				setRepos(repos)
+			})
+		}
 	}, [])
 
 	const handleInputChange = (e) => {
@@ -23,13 +70,16 @@ const ProjectForm = (props) => {
 		}))
 	}
 
+	const handleDropdownChange = (e) => {
+		setSelectedRepo(e.target.value)
+	}
+
 	const handleSubmit = (e) => {
 		e.preventDefault()
 	}
-
 	return (
 		<div className='project-form-container'>
-			<Dropdown />
+			<Dropdown onChange={handleDropdownChange} options={repos} loading={!repos} />
 			<Form onSubmit={handleSubmit}>
 				<div className='project-form'>
 					<Form.Field className='project-form-image'>
