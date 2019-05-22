@@ -1,0 +1,14 @@
+.project-form {
+	display: flex;
+}
+
+.project-form-image,
+.project-form-details {
+	padding: 3em;
+	flex: 1;
+}
+
+.project-form-buttons {
+	padding: 3em;
+	float: right;
+}

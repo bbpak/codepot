@@ -5,6 +5,7 @@ import { setCurrentUser } from './actions'
 import ProjectList from './components/containers/ProjectList'
 import './App.css'
 import NavBar from './components/navbar/NavBar'
+import ProjectForm from './components/forms/ProjectForm'
 
 window._API_URL_ = 'http://localhost:3000/'
 
@@ -32,13 +33,12 @@ const App = (props) => {
 		return ''
 	}
 
-	const handleLogIn = (user) => {}
-
 	return (
 		<Router>
 			<div classkey='App'>
 				<NavBar />
 				<main>
+					{props.currentUser && <ProjectForm />}
 					<ProjectList />
 				</main>
 			</div>
