@@ -25,7 +25,11 @@ class UsersController < ApplicationController
   def destroy
     @user.destroy
   end
-  
+ 
+  def projects
+    render json: @user.projects
+  end
+
   private
   
   def user_params

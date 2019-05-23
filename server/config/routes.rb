@@ -6,6 +6,8 @@ Rails.application.routes.draw do
     resources :project_likes, only: [:index, :create, :destroy], shallow: true
   end
 
+  get '/user/:id/projects', to: 'users#projects'
+
   get '/auth/github', to: 'authentication#github', format: false
   get '/signout', to: 'authentication#signout'
 end
