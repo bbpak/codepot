@@ -9,6 +9,13 @@ export const setCurrentUser = (currentUser) => {
 	}
 }
 
+export const setProjects = (projects) => {
+	return {
+		type: SET_PROJECTS,
+		projects
+	}
+}
+
 export const selectProject = (project) => {
 	return {
 		type: SELECT_PROJECT,

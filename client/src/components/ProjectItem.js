@@ -1,9 +1,9 @@
 import React from 'react'
 import { Card, Image, Icon } from 'semantic-ui-react'
 
-const ProjectCard = (props) => {
+const ProjectItem = (props) => {
 	return (
-		<Card onClick={() => props.selectProject(props.project)}>
+		<Card fluid className='project-item' onClick={() => props.selectProject(props.project)}>
 			<Image src={props.project.cover_image_url} wrapped ui={false} />
 			<Card.Content>
 				<Card.Header>{props.project.name}</Card.Header>
@@ -11,10 +11,15 @@ const ProjectCard = (props) => {
 			<Card.Content extra>
 				<Icon name='user' />
 				1 Like
-				<i className={`devicon-${props.project.language.toLowerCase()}-plain colored`} />
+				<span className='languages'>
+					<i
+						title={props.project.language}
+						className={`devicon-${props.project.language.toLowerCase()}-plain colored`}
+					/>
+				</span>
 			</Card.Content>
 		</Card>
 	)
 }
 
-export default ProjectCard
+export default ProjectItem

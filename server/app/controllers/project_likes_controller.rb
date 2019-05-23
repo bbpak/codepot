@@ -1,4 +1,4 @@
-class Api::ProjectLikesController < ApplicationController
+class ProjectLikesController < ApplicationController
   before_action :find_project_like, only: [:update]
   # before_action :authenticate_user!
   

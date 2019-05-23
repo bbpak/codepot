@@ -1,7 +1,17 @@
-.project-list {
-	justify-content: space-evenly;
+.project-filter {
+	flex: 1;
 }
 
-.project-card {
-	position: relative;
+.project-list {
+	flex: 5;
+	overflow-y: auto;
+}
+
+.project-item {
+	margin: 0 !important;
+	height: 200px;
+}
+
+.languages {
+	float: right;
 }

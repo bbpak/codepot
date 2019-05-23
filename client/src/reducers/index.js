@@ -11,7 +11,12 @@ const currentUserReducer = (currentUser = null, action) => {
 }
 
 const projectsReducer = (projects = [], action) => {
-	return projects
+	switch (action.type) {
+		case actionTypes.SET_PROJECTS:
+			return action.projects
+		default:
+			return projects
+	}
 }
 
 const selectedProjectReducer = (selectedProject = null, action) => {
