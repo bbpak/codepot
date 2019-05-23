@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
+import { Redirect } from 'react-router-dom'
 import { Form, Dropdown, Button } from 'semantic-ui-react'
 import ImageUploader from 'react-images-upload'
 import { camelCase } from 'lodash'
@@ -15,6 +16,7 @@ const ProjectForm = (props) => {
 	const [ selectedRepo, setSelectedRepo ] = useState(null)
 	const [ coverImage, setCoverImage ] = useState(null)
 	const [ isLoading, setIsLoading ] = useState(true)
+	const [ redirect, setRedirect ] = useState(false)
 	const { currentUser: { username } } = props
 
 	// Replace _, -, camelCase with whitespace for legible name
@@ -87,13 +89,17 @@ const ProjectForm = (props) => {
 		}))
 	}
 
+	const handleCancel = () => {
+		setRedirect(true)
+	}
+
 	const handleImageDrop = (files, URLs) => {
 		console.log(files, URLs)
 	}
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
-		console.log(inputs)
+
 		// Create project
 		fetch(window._API_URL_ + 'projects', {
 			method: 'POST',
@@ -105,7 +111,10 @@ const ProjectForm = (props) => {
 			body: JSON.stringify(inputs)
 		})
 			.then((res) => res.json())
-			.then((data) => console.log(data))
+			.then((data) => {
+				console.log(data)
+				setRedirect(true)
+			})
 	}
 
 	return (
@@ -161,6 +170,7 @@ const ProjectForm = (props) => {
 					</div>
 				</div>
 				<div className='project-form-buttons'>
+					{redirect && <Redirect to='/' />}
 					<Button primary type='submit'>
 						Create Project
 					</Button>
