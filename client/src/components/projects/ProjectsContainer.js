@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Card } from 'semantic-ui-react'
-import ProjectItem from '../ProjectItem'
+import ProjectItem from './ProjectItem'
 import { selectProject } from '../../actions'
 import '../styles/projects.css'
 
