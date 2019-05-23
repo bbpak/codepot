@@ -4,9 +4,7 @@ import { Redirect } from 'react-router-dom'
 import { Form, Dropdown, Button } from 'semantic-ui-react'
 import ImageUploader from 'react-images-upload'
 import { camelCase } from 'lodash'
-import '../styles/projectform.css'
-
-// const graphql = require('@octokit/graphql')
+import '../styles/form.css'
 
 let reposData = {}
 
@@ -127,48 +125,50 @@ const ProjectForm = (props) => {
 				loading={isLoading}
 				selection
 			/>
-			<Form className={!selectedRepo ? 'disabled' : ''} onSubmit={handleSubmit}>
-				<div className='project-form'>
-					<Form.Field className='project-form-image'>
-						<label className='label'>Cover Image</label>
-						<ImageUploader
-							withIcon
-							buttonText='Upload image'
-							onChange={handleImageDrop}
-							imgExtension={[ '.jpg', '.gif', '.png' ]}
-							maxFileSize={5242880}
-						/>
-					</Form.Field>
-					<div className='project-form-details'>
-						<Form.Field>
-							<Form.Input
-								label='Project Name'
-								name='name'
-								placeholder='project name'
-								value={inputs['name']}
-								onChange={handleInputChange}
+			<Form onSubmit={handleSubmit}>
+				{selectedRepo && (
+					<div className='project-form animated fadeInUp'>
+						<Form.Field className='project-form-image'>
+							<label className='label'>Cover Image</label>
+							<ImageUploader
+								withIcon
+								buttonText='Upload image'
+								onChange={handleImageDrop}
+								imgExtension={[ '.jpg', '.gif', '.png' ]}
+								maxFileSize={5242880}
 							/>
 						</Form.Field>
-						<Form.Field>
-							<Form.Input
-								label='Repo URL'
-								name='repo_url'
-								placeholder='repository URL'
-								value={inputs['repo_url']}
-								onChange={handleInputChange}
-							/>
-						</Form.Field>
-						<Form.Field>
-							<Form.Input
-								label='Project URL'
-								name='project_url'
-								placeholder='project URL'
-								value={inputs['project_url']}
-								onChange={handleInputChange}
-							/>
-						</Form.Field>
+						<div className='project-form-details'>
+							<Form.Field>
+								<Form.Input
+									label='Project Name'
+									name='name'
+									placeholder='project name'
+									value={inputs['name']}
+									onChange={handleInputChange}
+								/>
+							</Form.Field>
+							<Form.Field>
+								<Form.Input
+									label='Repo URL'
+									name='repo_url'
+									placeholder='repository URL'
+									value={inputs['repo_url']}
+									onChange={handleInputChange}
+								/>
+							</Form.Field>
+							<Form.Field>
+								<Form.Input
+									label='Project URL'
+									name='project_url'
+									placeholder='project URL'
+									value={inputs['project_url']}
+									onChange={handleInputChange}
+								/>
+							</Form.Field>
+						</div>
 					</div>
-				</div>
+				)}
 				<div className='project-form-buttons'>
 					{redirect && <Redirect to='/' />}
 					<Button primary type='submit'>
