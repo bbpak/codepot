@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 import { Container } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { setCurrentUser } from './actions'
@@ -33,15 +33,14 @@ const App = (props) => {
 	!props.currentUser && props.setCurrentUser(getUserFromCookies('current_user'))
 
 	return (
-		<Router>
-			<div classkey='App' className='App'>
-				<NavBar />
-				<Container>
-					{props.currentUser && <ProjectForm />}
-					<ProjectList />
-				</Container>
-			</div>
-		</Router>
+		<div classkey='App' className='App'>
+			<NavBar />
+			<Container>
+				<Route exact path='/' component={ProjectList} />
+				<Route exact path='/new-project' component={ProjectForm} />
+				<ProjectList />
+			</Container>
+		</div>
 	)
 }
 

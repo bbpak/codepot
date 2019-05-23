@@ -1,21 +1,94 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Project from '../Project'
+import { Card } from 'semantic-ui-react'
+import ProjectCard from '../ProjectCard'
 import { selectProject } from '../../actions'
+import '../styles/projects.css'
 
 class ProjectList extends React.Component {
 	renderList() {
-		return this.props.projects.map((project, i) => {
-			return <Project selectProject={this.props.selectProject} project={project} key={i} />
+		return [
+			{
+				name: 'Test',
+				project_url: 'test',
+				repo_url: 'test',
+				cover_image_url: 'https://react.semantic-ui.com/images/avatar/large/matthew.png',
+				language: 'Ruby'
+			},
+			{
+				name: 'Test',
+				project_url: 'test',
+				repo_url: 'test',
+				cover_image_url: 'https://react.semantic-ui.com/images/avatar/large/matthew.png',
+				language: 'Ruby'
+			},
+			{
+				name: 'Test',
+				project_url: 'test',
+				repo_url: 'test',
+				cover_image_url: 'https://react.semantic-ui.com/images/avatar/large/matthew.png',
+				language: 'Ruby'
+			},
+			{
+				name: 'Test',
+				project_url: 'test',
+				repo_url: 'test',
+				cover_image_url: 'https://react.semantic-ui.com/images/avatar/large/matthew.png',
+				language: 'Ruby'
+			},
+			{
+				name: 'Test',
+				project_url: 'test',
+				repo_url: 'test',
+				cover_image_url: 'https://react.semantic-ui.com/images/avatar/large/matthew.png',
+				language: 'Ruby'
+			},
+			{
+				name: 'Test',
+				project_url: 'test',
+				repo_url: 'test',
+				cover_image_url: 'https://react.semantic-ui.com/images/avatar/large/matthew.png',
+				language: 'Ruby'
+			},
+			{
+				name: 'Test',
+				project_url: 'test',
+				repo_url: 'test',
+				cover_image_url: 'https://react.semantic-ui.com/images/avatar/large/matthew.png',
+				language: 'Ruby'
+			},
+			{
+				name: 'Test',
+				project_url: 'test',
+				repo_url: 'test',
+				cover_image_url: 'https://react.semantic-ui.com/images/avatar/large/matthew.png',
+				language: 'Ruby'
+			},
+			{
+				name: 'Test',
+				project_url: 'test',
+				repo_url: 'test',
+				cover_image_url: 'https://react.semantic-ui.com/images/avatar/large/matthew.png',
+				language: 'Ruby'
+			},
+			{
+				name: 'Test',
+				project_url: 'test',
+				repo_url: 'test',
+				cover_image_url: 'https://react.semantic-ui.com/images/avatar/large/matthew.png',
+				language: 'Ruby'
+			}
+		].map((project, i) => {
+			return <ProjectCard selectProject={this.props.selectProject} project={project} key={i} />
 		})
 	}
 
 	render() {
 		return (
-			<div>
+			<Card.Group className='project-list'>
 				{this.renderList()}
 				<p>{this.props.selectedProject && this.props.selectedProject.name}</p>
-			</div>
+			</Card.Group>
 		)
 	}
 }

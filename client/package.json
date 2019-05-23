@@ -5,7 +5,6 @@
   "dependencies": {
     "@octokit/graphql": "^2.1.2",
     "cloudinary": "^1.14.0",
-    "devicon": "^2.2.0",
     "dotenv": "^8.0.0",
     "lodash": "^4.17.11",
     "react": "^16.8.6",
