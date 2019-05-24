@@ -29,6 +29,10 @@ class ProjectsController < ApplicationController
   def destroy
     @project.destroy
   end
+
+  def tags
+    render json: Tag.all
+  end
     
   private
   

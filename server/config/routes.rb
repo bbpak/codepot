@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   end
 
   get '/user/:id/projects', to: 'users#projects'
+  get '/projects/tags', to: 'projects#tags'
 
   get '/auth/github', to: 'authentication#github', format: false
   get '/signout', to: 'authentication#signout'
