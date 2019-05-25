@@ -4,9 +4,8 @@ import { Redirect } from 'react-router-dom'
 import { Form, Dropdown, Button } from 'semantic-ui-react'
 import ImageUploader from 'react-images-upload'
 import { camelCase } from 'lodash'
-import tags from '../../data/tags.json'
 import '../styles/form.css'
-	
+
 let reposData = {}
 
 const ProjectForm = (props) => {
@@ -33,9 +32,11 @@ const ProjectForm = (props) => {
 	}
 
 	useEffect(() => {
-		if (!sessionStorage.getItem("")) {
+		let repos = sessionStorage.getItem('repos')
+
+		if (!repos) {
 			const reposURL = `https://api.github.com/users/${username}/repos?sort=updated&per_page=100`
-			let repos = []
+			repos = []
 
 			// Go through 300 repos w/ 100 per page limit for FI students with a ton of labs...
 			// Switch to GraphQL stretch goal 🤞
@@ -51,6 +52,7 @@ const ProjectForm = (props) => {
 						if (!repo.fork) {
 							if (repos.includes(repo)) break
 
+							console.log(repo)
 							repos.push({
 								key: j,
 								text: repo.name,
@@ -67,16 +69,15 @@ const ProjectForm = (props) => {
 					}
 
 					setRepoOptions(repos)
-					sessionStorage("repoOptions", repos)
+					sessionStorage.setItem('repoOptions', repos)
 
 					// Done with all 3 fetch requests, set loading false
 					if (i === 3) setIsLoading(false)
 				})
 			}
+		} else {
+			setRepoOptions(repos)
 		}
-		
-
-
 	}, [])
 
 	const handleInputChange = (e) => {
@@ -124,44 +125,34 @@ const ProjectForm = (props) => {
 
 	const renderFormField = (name) => {
 		return (
-		<Form.Field>
-			<Form.Input
-				label={namify(name)}
-				name={name}
-				value={inputs[name]}
-				onChange={handleInputChange}
-			/>
-		</Form.Field>)
+			<Form.Field>
+				<Form.Input label={namify(name)} name={name} value={inputs[name]} onChange={handleInputChange} />
+			</Form.Field>
+		)
 	}
 
 	const renderForm = () => {
 		return (
-			<>
-			<div className='project-form animated fadeInUp'>
-				<Form.Field className='project-form-image'>
-					<label className='label'>Cover Image</label>
-					<ImageUploader
-						withIcon
-						buttonText='Upload image'
-						onChange={handleImageDrop}
-						imgExtension={[ '.jpg', '.gif', '.png' ]}
-						maxFileSize={5242880}
-					/>
-				</Form.Field>
-				<div className='project-form-details'>
-					{renderFormField('name')}
-					{renderFormField('repo_url')}
-					{renderFormField('project_url')}
+			<React.Fragment>
+				<div className='project-form animated fadeInUp'>
+					<Form.Field className='project-form-image'>
+						<label className='label'>Cover Image</label>
+						<ImageUploader
+							withIcon
+							buttonText='Upload image'
+							onChange={handleImageDrop}
+							imgExtension={[ '.jpg', '.gif', '.png' ]}
+							maxFileSize={5242880}
+						/>
+					</Form.Field>
+					<div className='project-form-details'>
+						{renderFormField('name')}
+						{renderFormField('repo_url')}
+						{renderFormField('project_url')}
+					</div>
 				</div>
-			</div>
-			<Dropdown
-				fluid
-				multiple
-				search
-				selection
-				options={[{key:1, name: ''}]}
-			/>
-			</>
+				<Dropdown fluid multiple search selection options={[ { key: 1, name: '' } ]} />
+			</React.Fragment>
 		)
 	}
 
@@ -178,7 +169,7 @@ const ProjectForm = (props) => {
 			/>
 			<Form onSubmit={handleSubmit}>
 				{selectedRepo && renderForm()}
-				
+
 				<div className='project-form-buttons'>
 					{redirect && <Redirect to='/' />}
 					<Button primary type='submit'>

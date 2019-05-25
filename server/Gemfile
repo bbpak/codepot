@@ -54,3 +54,4 @@ gem 'nokogiri'
 
 # API
 gem 'rest-client'
+gem 'css_parser'

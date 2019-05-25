@@ -31,7 +31,7 @@ class ProjectsController < ApplicationController
   end
 
   def tags
-    render json: Tag.all
+    render json: Tag.all.order(:name)
   end
     
   private
