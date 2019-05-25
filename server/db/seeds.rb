@@ -18,6 +18,16 @@ require 'css_parser'
 # and the respective colors assciated with them by web scraping /
 # using API/raw json files from several different sources
 
+
+def c_sharp_plus_to_symbol(name)
+  if name === 'csharp'
+    name = 'c#'
+  elsif name === 'cplusplus'
+    name = 'c++'
+  end
+  name
+end
+
 default_color = '#9896A4'
 
 # Web scrape topics from GitHub topics
@@ -25,7 +35,11 @@ url = 'https://github.com/github/explore/tree/master/topics'
 doc = Nokogiri::HTML(open(url))
 topics = doc.css('td.content a.js-navigation-open').each do |a|
   name = a.text.include?("-") ? a.text.gsub!("-", " ") : a.text
-  Tag.find_or_create_by!(name: name, color: default_color)
+  name = c_sharp_plus_to_symbol(name)
+
+  if name
+    Tag.find_or_create_by!(name: name, color: default_color)
+  end
 end
 
 # Also add tags from devicons since that what we use in the frontend
@@ -35,7 +49,10 @@ devicon_data = JSON.parse(response.body)
 
 devicon_data.each do |tag|
   if !tag["tags"].to_set.intersect?(['manager','graphic','version-control'].to_set)
+    name = c_sharp_plus_to_symbol(tag["name"])
+    if name
       Tag.find_or_create_by!(name: tag["name"], color: default_color)
+    end
   end
 end
 
@@ -60,7 +77,7 @@ parser.each_selector do |selector, dec, spec|
   color = dec[/#{"color: "}(.*?)#{";"}/m, 1]
   if name && color 
     tag = Tag.find_by(name: name) 
-    if (tag)
+    if tag
       tag.update!(color: color)
     end
   end
