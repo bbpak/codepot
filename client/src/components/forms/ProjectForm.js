@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom'
 import { Form, Dropdown, Button } from 'semantic-ui-react'
 import ImageUploader from 'react-images-upload'
 import { camelCase } from 'lodash'
+import axios from 'axios'
 import '../styles/form.css'
 
 let reposData = {}
@@ -12,6 +13,7 @@ const ProjectForm = (props) => {
 	const [ inputs, setInputs ] = useState({ user_id: props.currentUser.id })
 	const [ repoOptions, setRepoOptions ] = useState([])
 	const [ tagOptions, setTagOptions ] = useState([])
+	const [ selectedTags, setSelectedTags ] = useState([])
 	const [ selectedRepo, setSelectedRepo ] = useState(null)
 	const [ coverImage, setCoverImage ] = useState(null)
 	const [ isLoading, setIsLoading ] = useState(true)
@@ -42,38 +44,49 @@ const ProjectForm = (props) => {
 			// Switch to GraphQL stretch goal 🤞
 			for (let i = 1; i <= 3; i++) {
 				// Fetch user's public github repos
-				fetch(reposURL + `&page=${i}`).then((res) => res.json()).then((data) => {
-					// For-loop instead of forEach so I can break
-					// Filter only relevant properties
-					for (let j = 0; j < data.length; j++) {
-						const repo = data[j]
+				axios
+					.get(reposURL + `&page=${i}`, { headers: { Accept: 'application/vnd.github.mercy-preview+json' } })
+					.then((resp) => {
+						// For-loop instead of forEach so I can break
+						// Filter only relevant properties
+						for (let j = 0; j < resp.data.length; j++) {
+							const repo = resp.data[j]
 
-						// Don't include forks
-						if (!repo.fork) {
-							if (repos.includes(repo)) break
+							// Don't include forks
+							if (!repo.fork) {
+								if (repos.includes(repo)) break
 
-							console.log(repo)
-							repos.push({
-								key: j,
-								text: repo.name,
-								value: repo.name
-							})
+								let languages = {}
 
-							// To pre-fill form with selected repo
-							reposData[repo.name] = {
-								name: namify(repo.name),
-								repo_url: repo.html_url,
-								language: repo.language
+								// Have to make ANOTHER fetch just to get the languages used
+								if (repo.language) {
+									axios.get(repo.languages_url).then((resp) => (languages = resp.data))
+								}
+
+								let tags = [ ...Object.keys(languages), ...repo.topics ]
+
+								repos.push({
+									key: j,
+									text: repo.name,
+									value: repo.name,
+									tags: tags
+								})
+
+								// To pre-fill form with selected repo
+								reposData[repo.name] = {
+									name: namify(repo.name),
+									repo_url: repo.html_url,
+									tags: tags
+								}
 							}
 						}
-					}
 
-					setRepoOptions(repos)
-					sessionStorage.setItem('repoOptions', repos)
+						setRepoOptions(repos)
+						sessionStorage.setItem('repoOptions', repos)
 
-					// Done with all 3 fetch requests, set loading false
-					if (i === 3) setIsLoading(false)
-				})
+						// Done with all 3 fetch requests, set loading false
+						if (i === 3) setIsLoading(false)
+					})
 			}
 		} else {
 			setRepoOptions(repos)
@@ -108,16 +121,14 @@ const ProjectForm = (props) => {
 		e.preventDefault()
 
 		// Create project
-		fetch(window._API_URL_ + 'projects', {
-			method: 'POST',
-			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json'
-				// Authorization: `Bearer ${props.currentUser.token}`
-			},
-			body: JSON.stringify(inputs)
-		})
-			.then((res) => res.json())
+		axios
+			.post(window._API_URL_ + 'projects', {
+				headers: {
+					'Content-Type': 'application/json'
+					// Authorization: `Bearer ${props.currentUser.token}`
+				},
+				body: JSON.stringify(inputs)
+			})
 			.then((data) => {
 				setRedirect(true)
 			})

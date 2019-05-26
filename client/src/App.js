@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react'
 import { Route } from 'react-router-dom'
 import { connect } from 'react-redux'
+import axios from 'axios'
+
 import { setCurrentUser, setProjects } from './actions'
 import ProjectsContainer from './components/projects/ProjectsContainer'
 import NavBar from './components/navbar/NavBar'
@@ -12,8 +14,8 @@ window._API_URL_ = 'http://localhost:3000/'
 const App = (props) => {
 	useEffect(() => {
 		// Fetch all projects for now, set limits if there are a lot
-		fetch(window._API_URL_ + 'projects').then((res) => res.json()).then((data) => {
-			props.setProjects(data)
+		axios.get(window._API_URL_ + 'projects').then((resp) => {
+			props.setProjects(resp.data)
 		})
 	}, [])
 
@@ -38,7 +40,6 @@ const App = (props) => {
 	// Set current user from cookies after login
 	!props.currentUser && props.setCurrentUser(getUserFromCookies('current_user'))
 
-	console.log(props.projects)
 	return (
 		<div classkey='App' className='App'>
 			<NavBar />
