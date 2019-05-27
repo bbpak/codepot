@@ -8,7 +8,10 @@ class ProjectsController < ApplicationController
   end
 
   def create
-    @project = Project.new(project_params)
+    
+    @project = Project.new(
+      project_params
+    )
 
     if @project.save 
       render json: @project, status: :accepted

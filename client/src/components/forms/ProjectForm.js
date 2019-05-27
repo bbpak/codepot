@@ -33,8 +33,32 @@ const ProjectForm = (props) => {
 		)
 	}
 
+	// Make select options for tags from tags data
+	const getTagOptions = (tags) => {
+		return tags.map((tag) => {
+			return {
+				key: tag.name,
+				value: tag.name,
+				text: tag.name
+			}
+		})
+	}
+
 	useEffect(() => {
+		// Use sessionStorage to avoid redundant fetches for (mostly) static data
+		sessionStorage.clear()
 		let repos = sessionStorage.getItem('repos')
+		let allTags = sessionStorage.getItem('allTags')
+
+		// Fetch all tags
+		if (!allTags) {
+			axios.get(window._API_URL_ + 'projects/tags').then((resp) => {
+				sessionStorage.setItem('allTags', resp.data)
+				setTagOptions(getTagOptions(resp.data))
+			})
+		} else {
+			setTagOptions(getTagOptions(allTags))
+		}
 
 		if (!repos) {
 			const reposURL = `https://api.github.com/users/${username}/repos?sort=updated&per_page=100`
@@ -60,29 +84,33 @@ const ProjectForm = (props) => {
 
 								// Have to make ANOTHER fetch just to get the languages used
 								if (repo.language) {
-									axios.get(repo.languages_url).then((resp) => (languages = resp.data))
-								}
+									axios.get(repo.languages_url).then((resp) => {
+										languages = resp.data
+										let tags = [
+											...Object.keys(languages).map((lang) => lang.toLowerCase()),
+											...repo.topics
+										]
 
-								let tags = [ ...Object.keys(languages), ...repo.topics ]
+										repos.push({
+											key: j,
+											text: repo.name,
+											value: repo.name,
+											tags: tags
+										})
 
-								repos.push({
-									key: j,
-									text: repo.name,
-									value: repo.name,
-									tags: tags
-								})
-
-								// To pre-fill form with selected repo
-								reposData[repo.name] = {
-									name: namify(repo.name),
-									repo_url: repo.html_url,
-									tags: tags
+										// To pre-fill form with selected repo
+										reposData[repo.name] = {
+											name: namify(repo.name),
+											repo_url: repo.html_url,
+											tags: tags
+										}
+									})
 								}
 							}
 						}
 
 						setRepoOptions(repos)
-						sessionStorage.setItem('repoOptions', repos)
+						sessionStorage.setItem('repos', repos)
 
 						// Done with all 3 fetch requests, set loading false
 						if (i === 3) setIsLoading(false)
@@ -101,12 +129,20 @@ const ProjectForm = (props) => {
 		}))
 	}
 
-	const handleDropdownChange = (e) => {
+	const handleRepoDropdownChange = (e) => {
 		const repo = e.target.textContent
 		setSelectedRepo(repo)
 		setInputs((inputs) => ({
 			...reposData[repo]
 		}))
+		setSelectedTags(reposData[repo].tags)
+	}
+
+	const handleTagDropdownChange = (e) => {
+		const val = e.target.textContent
+		if (!selectedTags.includes(val)) {
+			setSelectedTags([ ...selectedTags, val ])
+		}
 	}
 
 	const handleCancel = () => {
@@ -119,7 +155,7 @@ const ProjectForm = (props) => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
-
+		console.log(inputs)
 		// Create project
 		axios
 			.post(window._API_URL_ + 'projects', {
@@ -127,7 +163,8 @@ const ProjectForm = (props) => {
 					'Content-Type': 'application/json'
 					// Authorization: `Bearer ${props.currentUser.token}`
 				},
-				body: JSON.stringify(inputs)
+				project: inputs,
+				tags: selectedTags
 			})
 			.then((data) => {
 				setRedirect(true)
@@ -141,7 +178,7 @@ const ProjectForm = (props) => {
 			</Form.Field>
 		)
 	}
-
+	console.log(selectedTags)
 	const renderForm = () => {
 		return (
 			<React.Fragment>
@@ -162,7 +199,18 @@ const ProjectForm = (props) => {
 						{renderFormField('project_url')}
 					</div>
 				</div>
-				<Dropdown fluid multiple search selection options={[ { key: 1, name: '' } ]} />
+				<Form.Field>
+					<label className='label'>Tags</label>
+					<Dropdown
+						fluid
+						multiple
+						search
+						selection
+						onChange={handleTagDropdownChange}
+						value={selectedTags}
+						options={tagOptions}
+					/>
+				</Form.Field>
 			</React.Fragment>
 		)
 	}
@@ -172,7 +220,7 @@ const ProjectForm = (props) => {
 			<h1>New Project</h1>
 			<Dropdown
 				placeholder='repository'
-				onChange={handleDropdownChange}
+				onChange={handleRepoDropdownChange}
 				value={selectedRepo}
 				options={repoOptions}
 				loading={isLoading}
