@@ -12,10 +12,7 @@ const ProjectItem = (props) => {
 				<Icon name='user' />
 				1 Like
 				<span className='languages'>
-					<i
-						title={props.project.language}
-						className={`devicon-${props.project.language.toLowerCase()}-plain colored`}
-					/>
+					<i title={props.project.language} />
 				</span>
 			</Card.Content>
 		</Card>
