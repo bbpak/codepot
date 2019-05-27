@@ -8,7 +8,6 @@ class ProjectsController < ApplicationController
   end
 
   def create
-    
     @project = Project.new(
       project_params
     )
@@ -35,6 +34,10 @@ class ProjectsController < ApplicationController
 
   def tags
     render json: Tag.all.order(:name)
+  end
+
+  def create_tag
+    Tag.create!(name: params[:name])
   end
     
   private

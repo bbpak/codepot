@@ -18,14 +18,45 @@ require 'css_parser'
 # and the respective colors assciated with them by web scraping /
 # using API/raw json files from several different sources
 
-
-def c_sharp_plus_to_symbol(name)
+# convert sharp / plusplus to # and ++
+def sharp_plus_to_symbol(name)
   if name === 'csharp'
     name = 'c#'
-  elsif name === 'cplusplus'
+  elsif name === 'fsharp'
+    name = 'f#'
+  elsif name === 'cplusplus' || name === 'cpp'
     name = 'c++'
   end
   name
+end
+
+# exclude some redundant tags
+def excludes_redundant(name) 
+  # exclude redundant tags
+  return [
+    'js13kgames',
+    'gamemaker',
+    'game off',
+    'global game jam',
+    'windows8',
+    'vuejs',
+    'pixel vision 8',
+    'pico 8',
+    'liko 12',
+    'perl',
+    'open source',
+    'ie10',
+    'html5',
+    'http',
+    'hacktoberfest',
+    'first tech challenge',
+    'first robotics competition',
+    'first',
+    'fantasy console',
+    'emoji',
+    'es6',
+    'css3'
+  ].exclude?(name)
 end
 
 default_color = '#9896A4'
@@ -37,7 +68,7 @@ topics = doc.css('td.content a.js-navigation-open').each do |a|
   name = a.text.include?("-") ? a.text.gsub!("-", " ") : a.text
   name = c_sharp_plus_to_symbol(name)
 
-  if name
+  if name && excludes_redundant(name)
     Tag.find_or_create_by!(name: name, color: default_color)
   end
 end
@@ -48,12 +79,17 @@ response = RestClient.get(api_url)
 devicon_data = JSON.parse(response.body)
 
 devicon_data.each do |tag|
-  if !tag["tags"].to_set.intersect?(['manager','graphic','version-control'].to_set)
+  if !tag["tags"].to_set.intersect?(['manager','graphic','version-control','browser'].to_set)
     name = c_sharp_plus_to_symbol(tag["name"])
-    if name
+    if name && excludes_redundant(name)
       Tag.find_or_create_by!(name: tag["name"], color: default_color)
     end
   end
+end
+
+# some custom tags
+['game', 'game mod', ].each do |tag|
+  Tag.find_or_create_by!(name: tag["name"], color: default_color)
 end
 
 # Get associated colors for languages
