@@ -15,6 +15,7 @@ const ProjectForm = (props) => {
 	const [ tagOptions, setTagOptions ] = useState([])
 	const [ selectedTags, setSelectedTags ] = useState([])
 	const [ selectedRepo, setSelectedRepo ] = useState(null)
+	const [ newTag, setNewTag ] = useState(null)
 	const [ coverImage, setCoverImage ] = useState(null)
 	const [ isLoading, setIsLoading ] = useState(true)
 	const [ redirect, setRedirect ] = useState(false)
@@ -155,7 +156,6 @@ const ProjectForm = (props) => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
-		console.log(inputs)
 		// Create project
 		axios
 			.post(window._API_URL_ + 'projects', {
@@ -171,14 +171,20 @@ const ProjectForm = (props) => {
 			})
 	}
 
-	const renderFormField = (name) => {
+	const renderFormInput = (name, placeholder) => {
 		return (
 			<Form.Field>
-				<Form.Input label={namify(name)} name={name} value={inputs[name]} onChange={handleInputChange} />
+				<Form.Input
+					label={namify(name)}
+					name={name}
+					value={inputs[name]}
+					placerholder={placeholder}
+					onChange={handleInputChange}
+				/>
 			</Form.Field>
 		)
 	}
-	console.log(selectedTags)
+
 	const renderForm = () => {
 		return (
 			<React.Fragment>
@@ -194,9 +200,9 @@ const ProjectForm = (props) => {
 						/>
 					</Form.Field>
 					<div className='project-form-details'>
-						{renderFormField('name')}
-						{renderFormField('repo_url')}
-						{renderFormField('project_url')}
+						{renderFormInput('name')}
+						{renderFormInput('repo_url')}
+						{renderFormInput('project_url')}
 					</div>
 				</div>
 				<Form.Field>
@@ -209,6 +215,14 @@ const ProjectForm = (props) => {
 						onChange={handleTagDropdownChange}
 						value={selectedTags}
 						options={tagOptions}
+					/>
+				</Form.Field>
+				<Form.Field>
+					<Form.Input
+						name='new-tag'
+						value={newTag}
+						placeholder='Add your own tag'
+						onChange={handleInputChange}
 					/>
 				</Form.Field>
 			</React.Fragment>

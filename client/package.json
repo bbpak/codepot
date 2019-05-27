@@ -5,6 +5,7 @@
   "dependencies": {
     "@octokit/graphql": "^2.1.2",
     "axios": "^0.18.0",
+    "bad-words": "^3.0.2",
     "cloudinary": "^1.14.0",
     "dotenv": "^8.0.0",
     "lodash": "^4.17.11",

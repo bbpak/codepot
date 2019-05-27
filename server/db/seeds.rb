@@ -18,21 +18,31 @@ require 'css_parser'
 # and the respective colors assciated with them by web scraping /
 # using API/raw json files from several different sources
 
-# convert sharp / plusplus to # and ++
-def sharp_plus_to_symbol(name)
-  if name === 'csharp'
-    name = 'c#'
-  elsif name === 'fsharp'
-    name = 'f#'
-  elsif name === 'cplusplus' || name === 'cpp'
-    name = 'c++'
+def fix_string(name)
+  # - to whitespace
+  if name.include?("-") 
+    return name.gsub!("-", " ")
+  # sharp/plus to # +
+  elsif name == 'csharp'
+    return 'c#'
+  elsif name == 'fsharp'
+    return 'f#'
+  elsif name == 'cplusplus' || name == 'cpp'
+    return 'c++'
+  # trim js at end of js frameworks
+  elsif name == 'angularjs'
+    return 'angular'
+  elsif name == 'vuejs'
+    return 'vue'
+  elsif name == 'reactjs'
+    return 'react'
+  else 
+    return name
   end
-  name
 end
 
 # exclude some redundant tags
 def excludes_redundant(name) 
-  # exclude redundant tags
   return [
     'js13kgames',
     'gamemaker',
@@ -62,14 +72,44 @@ end
 default_color = '#9896A4'
 
 # Web scrape topics from GitHub topics
+# url = 'https://github.com/github/explore/tree/master/topics'
+# doc = Nokogiri::HTML(open(url))
+# doc.css('td.content a.js-navigation-open').each do |a|
+#   # And then get names and alises from the topics
+#   url = "https://raw.githubusercontent.com/github/explore/master/topics/#{a.text}/index.md"
+#   response = RestClient.get(url)
+
+#   # Parse strings from md response
+#   text = response.body
+
+#   # Get aliases
+#   # aliases = text[/#{"aliases: "}(.*?)#{"\\n"}/m, 1].gsub!(" ", "") 
+
+#   # Get display name
+#   display_name = text[/#{"display_name: "}(.*?)#{"\\n"}/m, 1]
+
+#   # Get name
+#   name = text[/#{"topic: "}(.*?)#{"\\n"}/m, 1]  
+
+#   if (excludes_redundant(name))
+#     tag = Tag.find_or_create_by!(name: display_name)
+#   end
+# end
+
+# Web scrape from StackOverflow 2019 Developer Survey
+# url = 'https://insights.stackoverflow.com/survey/2019'
+# doc = Nokogiri::HTML(open(url))
+# a = doc.css('#technology-most-popular-technologies-all-respondents-collapse').each do |a|
+# end
+
+# Web scrape topics from GitHub topics
 url = 'https://github.com/github/explore/tree/master/topics'
 doc = Nokogiri::HTML(open(url))
 topics = doc.css('td.content a.js-navigation-open').each do |a|
-  name = a.text.include?("-") ? a.text.gsub!("-", " ") : a.text
-  name = c_sharp_plus_to_symbol(name)
+  name = fix_string(a.text)
 
   if name && excludes_redundant(name)
-    Tag.find_or_create_by!(name: name, color: default_color)
+    Tag.find_or_create_by!(name: name).update(color: default_color)
   end
 end
 
@@ -80,16 +120,12 @@ devicon_data = JSON.parse(response.body)
 
 devicon_data.each do |tag|
   if !tag["tags"].to_set.intersect?(['manager','graphic','version-control','browser'].to_set)
-    name = c_sharp_plus_to_symbol(tag["name"])
+    name = fix_string(tag["name"])
+
     if name && excludes_redundant(name)
-      Tag.find_or_create_by!(name: tag["name"], color: default_color)
+      Tag.find_or_create_by!(name: name).update(color: default_color)
     end
   end
-end
-
-# some custom tags
-['game', 'game mod', ].each do |tag|
-  Tag.find_or_create_by!(name: tag["name"], color: default_color)
 end
 
 # Get associated colors for languages
