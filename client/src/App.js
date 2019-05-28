@@ -12,13 +12,6 @@ import './App.css'
 window._API_URL_ = 'http://localhost:3000/'
 
 const App = (props) => {
-	useEffect(() => {
-		// Fetch all projects for now, set limits if there are a lot
-		axios.get(window._API_URL_ + 'projects').then((resp) => {
-			props.setProjects(resp.data)
-		})
-	}, [])
-
 	const getUserFromCookies = () => {
 		const key = 'current_user='
 		const decodedCookie = decodeURIComponent(document.cookie)

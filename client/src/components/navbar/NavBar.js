@@ -3,6 +3,7 @@ import { Menu } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import LoginButton from './LoginButton'
 import ProfileDropdown from './ProfileDropdown'
+import logo from '../../logo.png'
 import '../styles/navbar.css'
 
 const NavBar = ({ currentUser }) => {
@@ -10,11 +11,9 @@ const NavBar = ({ currentUser }) => {
 
 	return (
 		<Menu id='nav-bar' secondary borderless>
-			<Menu.Menu position='left'>
-				<Menu.Item>
-					<p>codepot</p>
-				</Menu.Item>
-			</Menu.Menu>
+			<div className='logo'>
+				<img src={logo} alt='logo' />
+			</div>
 			<Menu.Menu position='right'>
 				<Menu.Item>{isLoggedIn ? <ProfileDropdown currentUser={currentUser} /> : <LoginButton />}</Menu.Item>
 			</Menu.Menu>

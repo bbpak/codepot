@@ -15,6 +15,14 @@
 	color: white;
 }
 
+.logo {
+	padding: 12px;
+}
+
+.logo > img {
+	height: 25px;
+}
+
 .profile-dd {
 	display: flex;
 	flex-direction: row;

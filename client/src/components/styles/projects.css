@@ -4,14 +4,14 @@
 
 .project-list {
 	flex: 5;
-	overflow-y: auto;
 }
 
 .project-item {
-	margin: 0 !important;
-	height: 200px;
+	margin: 0 0 0.5em 0 !important;
+	height: 250px;
 }
 
-.languages {
-	float: right;
+.project-tag {
+	color: white !important;
+	text-shadow: 1px 1px 1px black;
 }

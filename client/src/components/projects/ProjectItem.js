@@ -1,5 +1,6 @@
 import React from 'react'
 import { Card, Image, Icon } from 'semantic-ui-react'
+import Tags from './Tags'
 
 const ProjectItem = (props) => {
 	return (
@@ -8,12 +9,8 @@ const ProjectItem = (props) => {
 			<Card.Content>
 				<Card.Header>{props.project.name}</Card.Header>
 			</Card.Content>
-			<Card.Content extra>
-				<Icon name='user' />
-				1 Like
-				<span className='languages'>
-					<i title={props.project.language} />
-				</span>
+			<Card.Content extra style={{ backgroundColor: 'black' }}>
+				<Tags {...props.project} />
 			</Card.Content>
 		</Card>
 	)
