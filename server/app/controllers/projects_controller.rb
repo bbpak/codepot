@@ -1,5 +1,5 @@
 class ProjectsController < ApplicationController
-  before_action :find_project, only: [:update]
+  before_action :find_project, only: [:show, :update]
   # before_action :authenticate_user!
   
   def index
@@ -7,12 +7,24 @@ class ProjectsController < ApplicationController
     render json: @projects
   end
 
+  def show 
+    project_data = @project
+    @project.tags.each do |tag|
+      project_data[:tags] ||= []
+      project_data[:tags] << tag
+    end
+
+    render json: project_data
+  end
+
   def create
-    @project = Project.new(
-      project_params
-    )
+    @project = Project.new(project_params)
 
     if @project.save 
+      params[:tags].each do |tag_name|
+        @project.tags.build(name: tag_name).save
+      end
+
       render json: @project, status: :accepted
     else
       render json: { errors: @project.errors.full_messages }, status: :unprocessible_entity

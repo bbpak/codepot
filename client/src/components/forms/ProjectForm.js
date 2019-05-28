@@ -15,7 +15,6 @@ const ProjectForm = (props) => {
 	const [ tagOptions, setTagOptions ] = useState([])
 	const [ selectedTags, setSelectedTags ] = useState([])
 	const [ selectedRepo, setSelectedRepo ] = useState(null)
-	const [ newTag, setNewTag ] = useState(null)
 	const [ coverImage, setCoverImage ] = useState(null)
 	const [ isLoading, setIsLoading ] = useState(true)
 	const [ redirect, setRedirect ] = useState(false)
@@ -133,8 +132,20 @@ const ProjectForm = (props) => {
 	const handleRepoDropdownChange = (e) => {
 		const repo = e.target.textContent
 		setSelectedRepo(repo)
+
+		let inputFields = {}
+
+		// Exclude tags array from inputs because we can't store arrays in db
+		Object.keys(reposData[repo]).forEach((key) => {
+			if (key !== 'tags') {
+				inputFields[key] = reposData[repo][key]
+			}
+		})
+
+		console.log(inputFields)
+
 		setInputs((inputs) => ({
-			...reposData[repo]
+			...inputFields
 		}))
 		setSelectedTags(reposData[repo].tags)
 	}
@@ -205,7 +216,7 @@ const ProjectForm = (props) => {
 						{renderFormInput('project_url')}
 					</div>
 				</div>
-				<Form.Field>
+				<Form.Field className='tags'>
 					<label className='label'>Tags</label>
 					<Dropdown
 						fluid
@@ -215,14 +226,6 @@ const ProjectForm = (props) => {
 						onChange={handleTagDropdownChange}
 						value={selectedTags}
 						options={tagOptions}
-					/>
-				</Form.Field>
-				<Form.Field>
-					<Form.Input
-						name='new-tag'
-						value={newTag}
-						placeholder='Add your own tag'
-						onChange={handleInputChange}
 					/>
 				</Form.Field>
 			</React.Fragment>
@@ -240,12 +243,12 @@ const ProjectForm = (props) => {
 				loading={isLoading}
 				selection
 			/>
-			<Form onSubmit={handleSubmit}>
-				{selectedRepo && renderForm()}
+			<Form>
+				{renderForm()}
 
 				<div className='project-form-buttons'>
 					{redirect && <Redirect to='/' />}
-					<Button primary type='submit'>
+					<Button primary onClick={handleSubmit} type='submit'>
 						Create Project
 					</Button>
 					<Button secondary>Cancel</Button>
