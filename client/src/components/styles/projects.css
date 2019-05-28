@@ -12,9 +12,13 @@
 	padding: 1em !important;
 }
 
-.project-item image {
-	height: 250px !important;
-	width: 250px !important;
+.project-item:hover {
+	cursor: pointer;
+}
+
+.project-item .description {
+	overflow: hidden;
+	max-height: calc(230px - 2em);
 }
 
 .project-item .project-tag {

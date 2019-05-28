@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Item } from 'semantic-ui-react'
 import axios from 'axios'
 import ProjectItem from './ProjectItem'
+import ProjectModal from './ProjectModal'
 import { selectProject, setProjects } from '../../actions'
 import '../styles/projects.css'
 
@@ -16,6 +17,7 @@ const ProjectsContainer = (props) => {
 
 	return (
 		<React.Fragment>
+			{props.selectedProject && <ProjectModal />}
 			<div className='project-filter'>THING</div>
 			<Item.Group className='project-list'>
 				{props.projects.map((project, i) => (

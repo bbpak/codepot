@@ -1,5 +1,7 @@
 import React from 'react'
 import { Item } from 'semantic-ui-react'
+import { connect } from 'react-redux'
+import { selectProject } from '../../actions'
 import Tags from './Tags'
 
 const ProjectItem = (props) => {
@@ -10,8 +12,7 @@ const ProjectItem = (props) => {
 	return (
 		<Item className='project-item' onClick={() => props.selectProject(props.project)}>
 			<Item.Image size='medium' src={coverImage} />
-
-			<Item.Content className='project-item-content'>
+			<Item.Content>
 				<Item.Header>{props.project.name}</Item.Header>
 				<Item.Description>
 					Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
@@ -28,4 +29,4 @@ const ProjectItem = (props) => {
 	)
 }
 
-export default ProjectItem
+export default connect(undefined, { selectProject })(ProjectItem)

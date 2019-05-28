@@ -193,24 +193,29 @@ const ProjectForm = (props) => {
 			})
 	}
 
-	const renderFormInput = (name, placeholder) => {
-		return (
-			<Form.Field>
-				<Form.Input
+	const renderFormInput = (name, type = 'text') => {
+		const input =
+			type === 'textarea' ? (
+				<Form.TextArea
+					maxLength={500}
 					label={namify(name)}
 					name={name}
 					value={inputs[name]}
-					placerholder={placeholder}
 					onChange={handleInputChange}
 				/>
-			</Form.Field>
-		)
+			) : (
+				<Form.Input label={namify(name)} name={name} value={inputs[name]} onChange={handleInputChange} />
+			)
+
+		return <Form.Field>{input}</Form.Field>
 	}
 
 	const renderForm = () => {
 		return (
 			<React.Fragment>
-				<div className='project-form animated fadeInUp'>
+				<div className='project-form'>
+					{' '}
+					{/* animated fadeInUp'> */}
 					<Form.Field className='project-form-image'>
 						<label className='label'>Cover Image</label>
 						<ImageUploader
@@ -225,6 +230,7 @@ const ProjectForm = (props) => {
 						{renderFormInput('name')}
 						{renderFormInput('repo_url')}
 						{renderFormInput('project_url')}
+						{renderFormInput('project_description', 'textarea')}
 					</div>
 				</div>
 				<Form.Field className='tags'>
