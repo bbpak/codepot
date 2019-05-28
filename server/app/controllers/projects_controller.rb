@@ -8,13 +8,7 @@ class ProjectsController < ApplicationController
   end
 
   def show 
-    project_data = @project
-    @project.tags.each do |tag|
-      project_data[:tags] ||= []
-      project_data[:tags] << tag
-    end
-
-    render json: project_data
+    render json: @project
   end
 
   def create
@@ -22,7 +16,10 @@ class ProjectsController < ApplicationController
 
     if @project.save 
       params[:tags].each do |tag_name|
-        @project.tags.build(name: tag_name).save
+        tag = Tag.find_by(name: tag_name)
+        if tag
+          ProjectTag.create(project_id: @project.id, tag_id: tag.id)
+        end
       end
 
       render json: @project, status: :accepted
