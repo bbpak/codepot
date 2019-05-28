@@ -1,5 +1,5 @@
 .project-form-container {
-	width: 100%;
+	min-width: 60%;
 }
 
 .project-form-image,

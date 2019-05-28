@@ -314,7 +314,6 @@ const ProjectForm = (props) => {
 			/>
 			<Form>
 				{selectedRepo && renderForm()}
-
 				<div className='project-form-buttons'>
 					{redirect && <Redirect to='/' />}
 					<Button primary onClick={handleSubmit} type='submit'>
