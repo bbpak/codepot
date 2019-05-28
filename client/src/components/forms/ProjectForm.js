@@ -158,19 +158,14 @@ const ProjectForm = (props) => {
 			}
 		})
 
-		console.log(inputFields)
-
 		setInputs((inputs) => ({
 			...inputFields
 		}))
 		setSelectedTags(reposData[repo].tags)
 	}
 
-	const handleTagDropdownChange = (e) => {
-		const val = e.target.textContent
-		if (!selectedTags.includes(val)) {
-			setSelectedTags([ ...selectedTags, val ])
-		}
+	const handleTagDropdownChange = (e, data) => {
+		setSelectedTags(data.value)
 	}
 
 	const handleCancel = () => {
@@ -260,7 +255,7 @@ const ProjectForm = (props) => {
 				selection
 			/>
 			<Form>
-				{renderForm()}
+				{selectedRepo && renderForm()}
 
 				<div className='project-form-buttons'>
 					{redirect && <Redirect to='/' />}
