@@ -4,7 +4,7 @@ import { Label } from 'semantic-ui-react'
 const Tag = ({ name, color }) => {
 	return (
 		<Label className='project-tag' horizontal style={{ backgroundColor: color }}>
-			{name}
+			<span>{name}</span>
 		</Label>
 	)
 }

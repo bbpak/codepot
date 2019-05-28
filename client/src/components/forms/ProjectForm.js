@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { Form, Dropdown, Button } from 'semantic-ui-react'
 import ImageUploader from 'react-images-upload'
-import { camelCase } from 'lodash'
+import { camelCase, filter } from 'lodash'
 import axios from 'axios'
 import '../styles/form.css'
 
@@ -86,6 +86,22 @@ const ProjectForm = (props) => {
 								if (repo.language) {
 									axios.get(repo.languages_url).then((resp) => {
 										languages = resp.data
+
+										// Exclude languages that are a very small percentage of the codebase
+										// Due to templates with lots of bloat (rails)
+										// let totalLines = Object.values(languages).reduce((sum, num) => sum + num)
+										// const minPercent = 0.05
+										const minLines = 1200
+
+										for (let lang in languages) {
+											if (
+												// languages[lang] < minPercent * totalLines ||
+												languages[lang] < minLines
+											) {
+												delete languages[lang]
+											}
+										}
+
 										let tags = [
 											...Object.keys(languages).map((lang) => lang.toLowerCase()),
 											...repo.topics

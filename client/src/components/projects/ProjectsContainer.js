@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
-import { Card } from 'semantic-ui-react'
+import { Item } from 'semantic-ui-react'
 import axios from 'axios'
 import ProjectItem from './ProjectItem'
 import { selectProject, setProjects } from '../../actions'
@@ -17,11 +17,11 @@ const ProjectsContainer = (props) => {
 	return (
 		<React.Fragment>
 			<div className='project-filter'>THING</div>
-			<Card.Group className='project-list'>
+			<Item.Group className='project-list'>
 				{props.projects.map((project, i) => (
 					<ProjectItem selectProject={props.selectProject} project={project} key={i} />
 				))}
-			</Card.Group>
+			</Item.Group>
 		</React.Fragment>
 	)
 }
