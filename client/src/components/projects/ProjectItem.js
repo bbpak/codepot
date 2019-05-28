@@ -5,13 +5,13 @@ import { selectProject } from '../../actions'
 import Tags from './Tags'
 
 const ProjectItem = (props) => {
-	const coverImage = props.project.cover_image_url
-		? props.project.cover_image_url
+	const image = props.project.image_url
+		? props.project.image_url
 		: 'https://react.semantic-ui.com/images/wireframe/image.png'
 
 	return (
 		<Item className='project-item' onClick={() => props.selectProject(props.project)}>
-			<Item.Image size='medium' src={coverImage} />
+			<Item.Image size='medium' src={image} />
 			<Item.Content>
 				<Item.Header>{props.project.name}</Item.Header>
 				<Item.Description>

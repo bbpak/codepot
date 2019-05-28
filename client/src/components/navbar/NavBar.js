@@ -1,5 +1,6 @@
 import React from 'react'
 import { Menu } from 'semantic-ui-react'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import LoginButton from './LoginButton'
 import ProfileDropdown from './ProfileDropdown'
@@ -11,9 +12,9 @@ const NavBar = ({ currentUser }) => {
 
 	return (
 		<Menu id='nav-bar' secondary borderless>
-			<div className='logo'>
+			<Link to='/' className='logo'>
 				<img src={logo} alt='logo' />
-			</div>
+			</Link>
 			<Menu.Menu position='right'>
 				<Menu.Item>{isLoggedIn ? <ProfileDropdown currentUser={currentUser} /> : <LoginButton />}</Menu.Item>
 			</Menu.Menu>

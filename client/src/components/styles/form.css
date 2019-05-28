@@ -2,17 +2,6 @@
 	width: 100%;
 }
 
-.project-form {
-	display: flex;
-	flex-wrap: wrap;
-}
-
-.project-form-image,
-.project-form-details {
-	min-width: 25em;
-	flex: 1;
-}
-
 .project-form-image,
 .project-form-details,
 .tags {

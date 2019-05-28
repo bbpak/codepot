@@ -1,20 +1,24 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
+import marked from 'marked'
 import { connect } from 'react-redux'
 import { selectProject } from '../../actions'
-import { Modal } from 'semantic-ui-react'
+import { Modal, Image } from 'semantic-ui-react'
+import { getHtml } from './markdownHelper'
 
 const ProjectModal = ({ selectedProject, selectProject }) => {
+	const [ projectReadme, setProjectReadme ] = useState(false)
+
+	const image = selectedProject.image_url
+		? selectedProject.image_url
+		: 'https://react.semantic-ui.com/images/wireframe/image.png'
+
 	return (
 		<Modal open closeOnDimmerClick closeIcon size='fullscreen' onClose={() => selectProject(null)}>
 			<Modal.Header>{selectedProject.name}</Modal.Header>
-			<Modal.Content>
-				<p>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-					et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-					aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-					cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-					culpa qui officia deserunt mollit anim id est laborum.
-				</p>
+			<Modal.Content image>
+				<Image size='large' wrapped src={image} />
+				{projectReadme && <div dangerouslySetInnerHTML={projectReadme} className='project-readme' />}
 			</Modal.Content>
 		</Modal>
 	)
