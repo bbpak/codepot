@@ -147,7 +147,14 @@ parser.load_uri!("https://raw.githubusercontent.com/konpa/devicon/master/devicon
 parser.each_selector do |selector, dec, spec|
   name = selector.split('-')[1]
   color = dec[/#{"color: "}(.*?)#{";"}/m, 1]
-  if name && color 
+  if name && color
+    # Handle the specific inconsistencies
+    if name == 'vuejs'
+      name = 'vue'
+    elsif name == 'angularjs'
+      name = 'angular'
+    end
+    
     tag = Tag.find_by(name: name) 
     if tag
       tag.update!(color: color)
