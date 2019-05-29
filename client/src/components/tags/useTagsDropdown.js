@@ -8,24 +8,10 @@ const useTagsDropdown = () => {
 		setSelectedTags(data.value)
 	}
 
-	const TagsDropdown = ({ tagOptions }) => {
-		return (
-			<Dropdown
-				fluid
-				multiple
-				search
-				selection
-				onChange={handleTagsChange}
-				value={selectedTags}
-				options={tagOptions}
-			/>
-		)
-	}
-
 	return {
 		selectedTags,
 		setSelectedTags,
-		TagsDropdown
+		handleTagsChange
 	}
 }
 

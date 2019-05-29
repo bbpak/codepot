@@ -2,39 +2,31 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { Form, Dropdown, Button } from 'semantic-ui-react'
-import ImageUploader from 'react-images-upload'
-import ReactMde from 'react-mde'
-import marked from 'marked'
-import { camelCase } from 'lodash'
 import axios from 'axios'
+import marked from 'marked'
+import { getHtml, namify } from '../helpers/formHelper'
 import useTagsDropdown from '../tags/useTagsDropdown'
-import 'react-mde/lib/styles/css/react-mde-all.css'
+import useFormInput from './useFormInput'
+import ImageUploader from './ImageUploader'
+import ReactMde from 'react-mde'
 import '../styles/form.css'
+import 'react-mde/lib/styles/css/react-mde-all.css'
 
 const ProjectForm = (props) => {
 	const [ isLoading, setIsLoading ] = useState(true)
 	const [ repoOptions, setRepoOptions ] = useState([])
 	const [ repoData, setRepoData ] = useState({})
-	const [ inputs, setInputs ] = useState({ user_id: props.currentUser.id })
-	const [ mdeIsPreview, setMdeIsPreview ] = useState(false)
 	const [ selectedRepo, setSelectedRepo ] = useState(null)
-	const [ image, setImage ] = useState(null)
 	const [ redirect, setRedirect ] = useState(false)
-	const { currentUser } = props
-	const { selectedTags, setSelectedTags, TagsDropdown } = useTagsDropdown()
+	const [ dropdownTags, setDropdownTags ] = useState([])
+	const [ markdownText, setMarkdownText ] = useState('')
+	const [ mdeIsPreview, setMdeIsPreview ] = useState(false)
 
-	// Replace _, -, camelCase with whitespace for legible name
-	const namify = (text) => {
-		return (
-			camelCase(text)
-				// insert a space before all caps
-				.replace(/([A-Z])/g, ' $1')
-				// uppercase the first character
-				.replace(/^./, function(str) {
-					return str.toUpperCase()
-				})
-		)
-	}
+	const { currentUser } = props
+
+	// Custom hooks
+	const { selectedTags, setSelectedTags, handleTagsChange } = useTagsDropdown()
+	const { inputs, setInputs, handleInputChange } = useFormInput()
 
 	const loadAllReposData = (repos) => {
 		let options = repoOptions
@@ -152,11 +144,11 @@ const ProjectForm = (props) => {
 		}
 	}, [])
 
-	const handleInputChange = (e) => {
-		e.persist()
-		setInputs((inputs) => ({
-			...inputs,
-			[e.target.name]: e.target.value
+	const getTagOptions = (tags) => {
+		return tags.map((tag) => ({
+			key: tag,
+			text: tag,
+			value: tag
 		}))
 	}
 
@@ -168,25 +160,27 @@ const ProjectForm = (props) => {
 
 		let inputFields = {}
 
-		// Exclude tags array from inputs because we can't store arrays in db
+		// Get just input fields
 		for (let key in repoData[repo]) {
-			if (key !== 'tags') {
+			if (key !== 'tags' && key !== 'markdown') {
 				inputFields[key] = repoData[repo][key]
 			}
 		}
 
-		setInputs((inputs) => ({
-			...inputFields
-		}))
+		setInputs(inputFields)
+		setMarkdownText(repoData[repo].markdown)
+
+		// This is to prevent loading 350+ tags on every re-render
+		setDropdownTags(getTagOptions(repoData[repo].tags))
 		setSelectedTags(repoData[repo].tags)
+	}
+
+	const handleMarkdownTextChange = (val) => {
+		setMarkdownText(val)
 	}
 
 	const handleCancel = () => {
 		setRedirect(true)
-	}
-
-	const handleImageDrop = (files, URLs) => {
-		console.log(files, URLs)
 	}
 
 	const handleSubmit = (e) => {
@@ -199,7 +193,7 @@ const ProjectForm = (props) => {
 					'Content-Type': 'application/json'
 					// Authorization: `Bearer ${props.currentUser.token}`
 				},
-				project: inputs,
+				project: { ...inputs, user_id: props.currentUser.id },
 				tags: selectedTags
 			})
 			.then((data) => {
@@ -207,38 +201,22 @@ const ProjectForm = (props) => {
 			})
 	}
 
-	const renderFormInput = (name, type = 'text') => {
-		console.log('render input')
-		let input = null
-		if (type === 'textarea') {
-			input = (
-				<Form.TextArea
-					maxLength={500}
-					label={namify(name)}
-					name={name}
-					value={inputs[name]}
-					onChange={handleInputChange}
-				/>
-			)
-		} else if (type === 'text') {
-			input = <Form.Input label={namify(name)} name={name} value={inputs[name]} onChange={handleInputChange} />
-		} else if (type === 'mde') {
-			console.log(inputs[name])
-			input = (
-				<React.Fragment>
-					<label className='label'>{namify(name)}</label>
-					<ReactMde
+	const renderFormField = (name, type = 'text') => {
+		return (
+			<Form.Field>
+				{type === 'textarea' ? (
+					<Form.TextArea
+						maxLength={500}
+						label={namify(name)}
+						name={name}
 						value={inputs[name]}
 						onChange={handleInputChange}
-						onTabChange={() => setMdeIsPreview(!mdeIsPreview)}
-						selectedTab={mdeIsPreview ? 'preview' : 'write'}
-						generateMarkdownPreview={(md) => Promise.resolve(marked(md))}
 					/>
-				</React.Fragment>
-			)
-		}
-
-		return <Form.Field>{input}</Form.Field>
+				) : (
+					<Form.Input label={namify(name)} name={name} value={inputs[name]} onChange={handleInputChange} />
+				)}
+			</Form.Field>
+		)
 	}
 
 	const renderForm = () => {
@@ -248,25 +226,38 @@ const ProjectForm = (props) => {
 					{/* animated fadeInUp'> */}
 					<Form.Field className='project-form-image'>
 						<label className='label'>Cover Image</label>
-						<ImageUploader
-							withIcon
-							buttonText='Upload image'
-							onChange={handleImageDrop}
-							imgExtension={[ '.jpg', '.gif', '.png' ]}
-							maxFileSize={5242880}
-						/>
+						<ImageUploader />
 					</Form.Field>
 					<div className='project-form-details'>
-						{renderFormInput('display_name')}
-						{renderFormInput('repo_url')}
-						{renderFormInput('project_url')}
-						{renderFormInput('short description', 'textarea')}
-						{renderFormInput('markdown', 'mde')}
+						{renderFormField('display_name')}
+						{renderFormField('repo_url')}
+						{renderFormField('project_url')}
+						{renderFormField('description', 'textarea')}
+						<Form.Field>
+							<label htmlFor='markdown'>Markdown</label>
+							<ReactMde
+								value={markdownText}
+								onChange={handleMarkdownTextChange}
+								onTabChange={() => setMdeIsPreview(!mdeIsPreview)}
+								selectedTab={mdeIsPreview ? 'preview' : 'write'}
+								generateMarkdownPreview={(md) => Promise.resolve(marked(md))}
+							/>
+						</Form.Field>
 					</div>
 				</div>
 				<Form.Field className='tags'>
 					<label className='label'>Tags</label>
-					<TagsDropdown tagOptions={props.tagOptions} />
+					<Dropdown
+						fluid
+						multiple
+						search
+						selection
+						onChange={handleTagsChange}
+						value={selectedTags}
+						onBlur={() => setDropdownTags(getTagOptions(selectedTags))}
+						onFocus={() => setDropdownTags(props.tagOptions)}
+						options={dropdownTags}
+					/>
 				</Form.Field>
 			</React.Fragment>
 		)

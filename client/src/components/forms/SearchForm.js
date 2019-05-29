@@ -4,7 +4,7 @@ import { Form } from 'semantic-ui-react'
 import useTagsDropdown from '../tags/useTagsDropdown'
 
 const SearchForm = (props) => {
-	const { selectedTags, setSelectedTags, TagsDropdown } = useTagsDropdown()
+	const { TagsDropdown } = useTagsDropdown()
 
 	return (
 		<Form>

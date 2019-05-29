@@ -4,7 +4,7 @@ import marked from 'marked'
 import { connect } from 'react-redux'
 import { selectProject } from '../../actions'
 import { Modal, Image } from 'semantic-ui-react'
-import { getHtml } from './markdownHelper'
+import { getHtml } from '../helpers/formHelper'
 
 const ProjectModal = ({ selectedProject, selectProject }) => {
 	const [ projectReadme, setProjectReadme ] = useState(false)

@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
-import { Grid, Item, Form } from 'semantic-ui-react'
+import { Grid, Item } from 'semantic-ui-react'
 import axios from 'axios'
 import ProjectItem from './ProjectItem'
 import ProjectModal from './ProjectModal'
 import { selectProject, setProjects } from '../../actions'
-import useTagsDropdown from '../tags/useTagsDropdown'
+import SearchForm from '../forms/SearchForm'
 import '../styles/projects.css'
-import SearchForm from './SearchForm'
 
 const ProjectsContainer = (props) => {
 	useEffect(() => {

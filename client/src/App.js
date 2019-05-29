@@ -5,7 +5,7 @@ import axios from 'axios'
 import { setCurrentUser, setProjects, setTagOptions } from './actions'
 import ProjectsContainer from './components/projects/ProjectsContainer'
 import NavBar from './components/navbar/NavBar'
-import ProjectForm from './components/projects/ProjectForm'
+import ProjectForm from './components/forms/ProjectForm'
 import './App.css'
 
 window._API_URL_ = 'http://localhost:3000/'

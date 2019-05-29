@@ -1,5 +1,7 @@
 import sanitizeHtml from 'sanitize-html'
+import { camelCase } from 'lodash'
 
+// Some default html with classes for styling
 export const getHtml = (markdown) => {
 	return {
 		__html: `<!DOCTYPE html>
@@ -18,4 +20,17 @@ export const getHtml = (markdown) => {
     </html>
   `
 	}
+}
+
+// Replace _, -, camelCase with whitespace for legible name
+export const namify = (text) => {
+	return (
+		camelCase(text)
+			// insert a space before all caps
+			.replace(/([A-Z])/g, ' $1')
+			// uppercase the first character
+			.replace(/^./, function(str) {
+				return str.toUpperCase()
+			})
+	)
 }
