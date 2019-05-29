@@ -2,7 +2,7 @@ import React from 'react'
 import { Item } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { selectProject } from '../../actions'
-import Tags from './Tags'
+import Tags from '../tags/Tags'
 
 const ProjectItem = (props) => {
 	const image = props.project.image_url

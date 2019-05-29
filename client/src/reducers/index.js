@@ -28,8 +28,18 @@ const selectedProjectReducer = (selectedProject = null, action) => {
 	}
 }
 
+const tagOptionsReducer = (tagOptions = [], action) => {
+	switch (action.type) {
+		case actionTypes.SET_TAG_OPTIONS:
+			return action.tagOptions
+		default:
+			return tagOptions
+	}
+}
+
 export default combineReducers({
 	currentUser: currentUserReducer,
 	projects: projectsReducer,
-	selectedProject: selectedProjectReducer
+	selectedProject: selectedProjectReducer,
+	tagOptions: tagOptionsReducer
 })

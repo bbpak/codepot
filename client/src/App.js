@@ -2,8 +2,7 @@ import React, { useEffect } from 'react'
 import { Route } from 'react-router-dom'
 import { connect } from 'react-redux'
 import axios from 'axios'
-
-import { setCurrentUser, setProjects } from './actions'
+import { setCurrentUser, setProjects, setTagOptions } from './actions'
 import ProjectsContainer from './components/projects/ProjectsContainer'
 import NavBar from './components/navbar/NavBar'
 import ProjectForm from './components/projects/ProjectForm'
@@ -12,6 +11,31 @@ import './App.css'
 window._API_URL_ = 'http://localhost:3000/'
 
 const App = (props) => {
+	// Make select options for tags from tags data
+	const makeTagOptions = (tags) => {
+		return tags.map((tag) => {
+			return {
+				key: tag.name,
+				value: tag.name,
+				text: tag.name
+			}
+		})
+	}
+
+	useEffect(() => {
+		const allTags = JSON.parse(sessionStorage.getItem('allTags'))
+
+		// Fetch all tags
+		if (!allTags) {
+			axios.get(window._API_URL_ + 'projects/tags').then((resp) => {
+				sessionStorage.setItem('allTags', JSON.stringify(resp.data))
+				props.setTagOptions(makeTagOptions(resp.data))
+			})
+		} else {
+			props.setTagOptions(makeTagOptions(allTags))
+		}
+	}, [])
+
 	const getUserFromCookies = () => {
 		const key = 'current_user='
 		const decodedCookie = decodeURIComponent(document.cookie)
@@ -47,7 +71,8 @@ const App = (props) => {
 const mapStateToProps = (state) => {
 	return {
 		currentUser: state.currentUser,
+		tagOptions: state.tagOptions,
 		projects: state.projects
 	}
 }
-export default connect(mapStateToProps, { setCurrentUser, setProjects })(App)
+export default connect(mapStateToProps, { setCurrentUser, setProjects, setTagOptions })(App)

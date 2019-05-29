@@ -5,8 +5,9 @@ import { Form, Dropdown, Button } from 'semantic-ui-react'
 import ImageUploader from 'react-images-upload'
 import ReactMde from 'react-mde'
 import marked from 'marked'
-import { camelCase, filter } from 'lodash'
+import { camelCase } from 'lodash'
 import axios from 'axios'
+import useTagsDropdown from '../tags/useTagsDropdown'
 import 'react-mde/lib/styles/css/react-mde-all.css'
 import '../styles/form.css'
 
@@ -17,12 +18,11 @@ const ProjectForm = (props) => {
 	const [ repoOptions, setRepoOptions ] = useState([])
 	const [ inputs, setInputs ] = useState({ user_id: props.currentUser.id })
 	const [ mdeIsPreview, setMdeIsPreview ] = useState(false)
-	const [ tagOptions, setTagOptions ] = useState([])
-	const [ selectedTags, setSelectedTags ] = useState([])
 	const [ selectedRepo, setSelectedRepo ] = useState(null)
 	const [ image, setImage ] = useState(null)
 	const [ redirect, setRedirect ] = useState(false)
 	const { currentUser: { username } } = props
+	const { selectedTags, setSelectedTags, TagsDropdown } = useTagsDropdown()
 
 	// Replace _, -, camelCase with whitespace for legible name
 	const namify = (text) => {
@@ -38,37 +38,13 @@ const ProjectForm = (props) => {
 		)
 	}
 
-	// Make select options for tags from tags data
-	const getTagOptions = (tags) => {
-		console.log('tag-ops')
-		return tags.map((tag) => {
-			return {
-				key: tag.name,
-				value: tag.name,
-				text: tag.name
-			}
-		})
-	}
-
 	useEffect(() => {
 		// Use sessionStorage to avoid redundant fetches for (mostly) static data
-		sessionStorage.clear()
-		let repos = sessionStorage.getItem('repos')
-		let allTags = sessionStorage.getItem('allTags')
+		let reposData = JSON.parse(sessionStorage.getItem('repos'))
 
-		// Fetch all tags
-		if (!allTags) {
-			axios.get(window._API_URL_ + 'projects/tags').then((resp) => {
-				sessionStorage.setItem('allTags', resp.data)
-				setTagOptions(getTagOptions(resp.data))
-			})
-		} else {
-			setTagOptions(getTagOptions(allTags))
-		}
-
-		if (!repos) {
+		if (!reposData) {
 			const reposURL = `https://api.github.com/users/${username}/repos?sort=updated&per_page=100`
-			repos = []
+			reposData = {}
 			let promises = []
 
 			// Go through 300 repos w/ 100 per page limit for FI students with a ton of labs...
@@ -88,7 +64,7 @@ const ProjectForm = (props) => {
 
 								// Don't include forks
 								if (!repo.fork) {
-									if (repos.includes(repo)) break
+									if (repoOptions.includes(repo)) break
 
 									let tags = []
 									let languages = {}
@@ -125,7 +101,9 @@ const ProjectForm = (props) => {
 									// Another fetch to get the readme
 									promises.push(
 										axios
-											.get(`https://raw.githubusercontent.com/${repo.full_name}/master/README.md`)
+											.get(
+												`https://raw.githubusercontent.com/${username}/${repo.name}/master/README.md`
+											)
 											.catch(() => {
 												reposData[repo.name].markdown = ''
 											})
@@ -136,19 +114,18 @@ const ProjectForm = (props) => {
 											})
 									)
 
-									repos.push({
+									repoOptions.push({
 										key: j,
 										text: repo.name,
-										value: repo.name,
-										tags: tags
+										value: repo.name
 									})
 
 									// To pre-fill form with selected repo
 									reposData[repo.name] = {
-										name: namify(repo.name),
+										displayName: namify(repo.name),
+										name: repo.name,
 										repo_url: repo.html_url,
 										description: repo.description ? repo.description : '',
-										full_name: repo.full_name,
 										tags: tags
 									}
 								}
@@ -159,12 +136,22 @@ const ProjectForm = (props) => {
 
 			// After all the fetches finish
 			axios.all(promises).then(() => {
-				setRepoOptions(repos)
-				sessionStorage.setItem('repos', repos)
+				setRepoOptions(repoOptions)
+				sessionStorage.setItem('repos', JSON.stringify(reposData))
 				setIsLoading(false)
 			})
 		} else {
-			setRepoOptions(repos)
+			let options = []
+			for (let repo in reposData) {
+				options.push({
+					key: reposData[repo].name,
+					text: reposData[repo].name,
+					value: reposData[repo].name
+				})
+			}
+			console.log(options)
+			setRepoOptions(options)
+			setIsLoading(false)
 		}
 	}, [])
 
@@ -178,28 +165,23 @@ const ProjectForm = (props) => {
 
 	const handleRepoDropdownChange = (e) => {
 		console.log('repo change')
+
 		const repo = e.target.textContent
 		setSelectedRepo(repo)
 
 		let inputFields = {}
-		console.log(reposData)
 
 		// Exclude tags array from inputs because we can't store arrays in db
-		Object.keys(reposData[repo]).forEach((key) => {
+		for (let key in reposData[repo]) {
 			if (key !== 'tags') {
 				inputFields[key] = reposData[repo][key]
 			}
-		})
+		}
 
 		setInputs((inputs) => ({
 			...inputFields
 		}))
-		setSelectedTags(reposData[repo].tags)
-	}
-
-	const handleTagDropdownChange = (e, data) => {
-		console.log('tag change')
-		setSelectedTags(data.value)
+		setSelectedTags(JSON.parse(sessionStorage.repos).tags)
 	}
 
 	const handleCancel = () => {
@@ -287,15 +269,7 @@ const ProjectForm = (props) => {
 				</div>
 				<Form.Field className='tags'>
 					<label className='label'>Tags</label>
-					<Dropdown
-						fluid
-						multiple
-						search
-						selection
-						onChange={handleTagDropdownChange}
-						value={selectedTags}
-						options={tagOptions}
-					/>
+					<TagsDropdown tagOptions={props.tagOptions} />
 				</Form.Field>
 			</React.Fragment>
 		)
@@ -314,6 +288,7 @@ const ProjectForm = (props) => {
 			/>
 			<Form>
 				{selectedRepo && renderForm()}
+
 				<div className='project-form-buttons'>
 					{redirect && <Redirect to='/' />}
 					<Button primary onClick={handleSubmit} type='submit'>
@@ -328,7 +303,8 @@ const ProjectForm = (props) => {
 
 const mapStateToProps = (state) => {
 	return {
-		currentUser: state.currentUser
+		currentUser: state.currentUser,
+		tagOptions: state.tagOptions
 	}
 }
 
