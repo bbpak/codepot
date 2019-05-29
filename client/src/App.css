@@ -8,6 +8,7 @@
 	padding: 2.5em;
 	margin-top: 50px;
 	display: flex;
+	flex-wrap: wrap;
 	justify-content: center;
 	overflow-y: auto;
 }

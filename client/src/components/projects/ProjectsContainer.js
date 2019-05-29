@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
-import { Item } from 'semantic-ui-react'
+import { Grid, Item, Form } from 'semantic-ui-react'
 import axios from 'axios'
 import ProjectItem from './ProjectItem'
 import ProjectModal from './ProjectModal'
 import { selectProject, setProjects } from '../../actions'
+import useTagsDropdown from '../tags/useTagsDropdown'
 import '../styles/projects.css'
+import SearchForm from './SearchForm'
 
 const ProjectsContainer = (props) => {
 	useEffect(() => {
@@ -18,12 +20,18 @@ const ProjectsContainer = (props) => {
 	return (
 		<React.Fragment>
 			{props.selectedProject && <ProjectModal />}
-			<div className='project-filter'>THING</div>
-			<Item.Group className='project-list'>
-				{props.projects.map((project, i) => (
-					<ProjectItem selectProject={props.selectProject} project={project} key={i} />
-				))}
-			</Item.Group>
+			<Grid doubling columns={2}>
+				<Grid.Column width={4} className='project-filter'>
+					<SearchForm />
+				</Grid.Column>
+				<Grid.Column width={12}>
+					<Item.Group className='project-list'>
+						{props.projects.map((project, i) => (
+							<ProjectItem selectProject={props.selectProject} project={project} key={i} />
+						))}
+					</Item.Group>
+				</Grid.Column>
+			</Grid>
 		</React.Fragment>
 	)
 }
