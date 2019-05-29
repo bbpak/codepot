@@ -1,12 +1,15 @@
 .App {
+	overflow: hidden;
+	height: 100vh;
 }
 
 .main-container {
 	height: 100%;
-	padding: 3em;
+	padding: 2.5em;
 	margin-top: 50px;
 	display: flex;
 	justify-content: center;
+	overflow-y: auto;
 }
 
 body {

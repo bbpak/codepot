@@ -25,7 +25,7 @@ const App = (props) => {
 	useEffect(() => {
 		const allTags = JSON.parse(sessionStorage.getItem('allTags'))
 
-		// Fetch all tags
+		// Fetch all tags and store in session storage
 		if (!allTags) {
 			axios.get(window._API_URL_ + 'projects/tags').then((resp) => {
 				sessionStorage.setItem('allTags', JSON.stringify(resp.data))

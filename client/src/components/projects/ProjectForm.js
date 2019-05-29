@@ -25,7 +25,6 @@ const ProjectForm = (props) => {
 
 	// Replace _, -, camelCase with whitespace for legible name
 	const namify = (text) => {
-		console.log('namify')
 		return (
 			camelCase(text)
 				// insert a space before all caps
@@ -258,7 +257,7 @@ const ProjectForm = (props) => {
 						/>
 					</Form.Field>
 					<div className='project-form-details'>
-						{renderFormInput('name')}
+						{renderFormInput('display_name')}
 						{renderFormInput('repo_url')}
 						{renderFormInput('project_url')}
 						{renderFormInput('short description', 'textarea')}
