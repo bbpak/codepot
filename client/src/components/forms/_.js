@@ -21,7 +21,7 @@ const ProjectForm = (props) => {
 	const [ dropdownTags, setDropdownTags ] = useState([])
 	const [ markdownText, setMarkdownText ] = useState('')
 	const [ mdeIsPreview, setMdeIsPreview ] = useState(false)
-	const [ image, setImage ] = useState('')
+	const [ image, setImage ] = useState(null)
 
 	const { currentUser } = props
 
@@ -179,24 +179,23 @@ const ProjectForm = (props) => {
 	const handleMarkdownTextChange = (val) => {
 		setMarkdownText(val)
 	}
+	console.log(process.env.REACT_APPCLOUD_API_KEY)
 
-	const handleUploadImage = (files, URLs) => {
-		setImage(URLs[URLs.length - 1])
-		// files.map((file) => {
-		// 	const formData = new FormData()
-		// 	formData.append('file', file)
-		// 	formData.append('api_key', process.env.REACT_APP_CLOUD_API_KEY)
-		// 	formData.append('upload_preset', 'encmp24r')
-		// 	formData.append('timestamp', (Date.now() / 1000) | 0)
-		// 	return axios
-		// 		.post(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/image/upload`, formData, {
-		// 			headers: { 'X-Requested-With': 'XMLHttpRequest' }
-		// 		})
-		// 		.then((resp) => {
-		// 			axios.post(window._API_URL_ + 'projects')
-		// 			setImage(resp.data.public_id)
-		// 		})
-		// })
+	const handleImageDrop = (files, URLs) => {
+		console.log(files, URLs)
+		files.map((file) => {
+			const formData = new FormData()
+			formData.append('file', file)
+			formData.append('api_key', '121248639855187')
+			formData.append('upload_preset', 'encmp24r')
+			formData.append('timestamp', (Date.now() / 1000) | 0)
+			// Replace cloudinary upload URL with yours
+			return axios
+				.post(`https://api.cloudinary.com/v1_1/crudhub/image/upload`, formData, {
+					headers: { 'X-Requested-With': 'XMLHttpRequest' }
+				})
+				.then((response) => console.log(response))
+		})
 	}
 
 	const handleCancel = () => {
@@ -247,21 +246,12 @@ const ProjectForm = (props) => {
 					<Form.Field className='project-form-image'>
 						<label className='label'>Cover</label>
 						<ImageUploader
-							singleImage
 							withIcon
-							buttonText='Upload Image'
-							onChange={handleUploadImage}
-							files={[ image ]}
+							buttonText='Upload image'
+							onChange={handleImageDrop}
 							imgExtension={[ '.jpg', '.gif', '.png' ]}
 							maxFileSize={5242880}
 						/>
-						{image && (
-							<div className='image-preview-container'>
-								<div className='image-preview' style={{ background: `url(${image})` }}>
-									<Button icon='delete' color='red' />
-								</div>
-							</div>
-						)}
 					</Form.Field>
 					<div className='project-form-details'>
 						{renderFormField('display_name')}
@@ -310,7 +300,7 @@ const ProjectForm = (props) => {
 				selection
 			/>
 			<Form>
-				{selectedRepo || (true && renderForm())}
+				{selectedRepo && renderForm()}
 
 				<div className='project-form-buttons'>
 					{redirect && <Redirect to='/' />}

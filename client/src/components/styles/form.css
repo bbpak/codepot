@@ -12,3 +12,32 @@
 .project-form-buttons {
 	float: right;
 }
+
+.image-preview {
+	width: 200px;
+	height: 200px;
+	background-position: center !important;
+	background-size: cover !important;
+	box-shadow: 1px 1px 1px black;
+}
+
+.image-preview-container {
+	position: relative;
+	top: -2em;
+	background: #fff;
+	box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.05);
+	position: relative;
+	border-radius: 10px;
+	padding: 20px 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	margin: 10px auto;
+}
+
+.image-preview .button {
+	position: relative;
+	left: 90%;
+	top: -1em;
+}

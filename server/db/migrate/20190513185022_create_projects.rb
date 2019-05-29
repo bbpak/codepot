@@ -5,7 +5,7 @@ class CreateProjects < ActiveRecord::Migration[5.2]
       t.string :display_name
       t.string :repo_url
       t.string :project_url
-      t.string :image_url
+      t.string :image_id
       t.integer :user_id
       t.string :description
       t.string :markdown

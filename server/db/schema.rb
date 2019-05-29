@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(version: 2019_05_24_155926) do
     t.string "display_name"
     t.string "repo_url"
     t.string "project_url"
-    t.string "image_url"
+    t.string "image_id"
     t.integer "user_id"
     t.string "description"
     t.string "markdown"
