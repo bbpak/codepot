@@ -10,7 +10,7 @@ const Tag = ({ name, color }) => {
 }
 
 const Tags = ({ tags }) => {
-	return <div className='project-tags'>{tags.map((tag) => <Tag {...tag} />)}</div>
+	return <div className='project-tags'>{tags.map((tag, i) => <Tag key={i} {...tag} />)}</div>
 }
 
 export default Tags

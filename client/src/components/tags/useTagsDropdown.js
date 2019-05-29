@@ -5,7 +5,7 @@ const useTagsDropdown = () => {
 	const [ selectedTags, setSelectedTags ] = useState([])
 
 	const handleTagsChange = (e, data) => {
-		setSelectedTags(data)
+		setSelectedTags(data.value)
 	}
 
 	const TagsDropdown = ({ tagOptions }) => {

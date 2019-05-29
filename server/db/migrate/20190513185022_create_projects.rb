@@ -8,6 +8,7 @@ class CreateProjects < ActiveRecord::Migration[5.2]
       t.string :image_url
       t.integer :user_id
       t.string :description
+      t.string :markdown
       
       t.timestamps
     end

@@ -11,17 +11,16 @@ import useTagsDropdown from '../tags/useTagsDropdown'
 import 'react-mde/lib/styles/css/react-mde-all.css'
 import '../styles/form.css'
 
-let reposData = {}
-
 const ProjectForm = (props) => {
 	const [ isLoading, setIsLoading ] = useState(true)
 	const [ repoOptions, setRepoOptions ] = useState([])
+	const [ repoData, setRepoData ] = useState({})
 	const [ inputs, setInputs ] = useState({ user_id: props.currentUser.id })
 	const [ mdeIsPreview, setMdeIsPreview ] = useState(false)
 	const [ selectedRepo, setSelectedRepo ] = useState(null)
 	const [ image, setImage ] = useState(null)
 	const [ redirect, setRedirect ] = useState(false)
-	const { currentUser: { username } } = props
+	const { currentUser } = props
 	const { selectedTags, setSelectedTags, TagsDropdown } = useTagsDropdown()
 
 	// Replace _, -, camelCase with whitespace for legible name
@@ -38,20 +37,40 @@ const ProjectForm = (props) => {
 		)
 	}
 
+	const loadAllReposData = (repos) => {
+		let options = repoOptions
+
+		if (!(options.size > 0)) {
+			for (let repo in repos) {
+				options.push({
+					key: repos[repo].name,
+					text: repos[repo].name,
+					value: repos[repo].name
+				})
+			}
+		}
+
+		setRepoData(repos)
+		setRepoOptions(options)
+		setIsLoading(false)
+	}
+
 	useEffect(() => {
 		// Use sessionStorage to avoid redundant fetches for (mostly) static data
-		let reposData = JSON.parse(sessionStorage.getItem('repos'))
+		let repos = JSON.parse(sessionStorage.getItem('repos'))
 
-		if (!reposData) {
-			const reposURL = `https://api.github.com/users/${username}/repos?sort=updated&per_page=100`
-			reposData = {}
+		// ONLY DO FETCHES IF NOTHING IN SESSION STORAGE
+		if (!repos) {
+			const reposURL = `https://api.github.com/users/${currentUser.username}/repos?sort=updated&per_page=100`
+			repos = {}
 			let promises = []
+			let promisesOfPromises = [] // Yes it's ridiculous
 
 			// Go through 300 repos w/ 100 per page limit for FI students with a ton of labs...
 			// Switch to GraphQL stretch goal 🤞
 			for (let i = 1; i <= 3; i++) {
 				// Fetch user's public github repos
-				promises.push(
+				promisesOfPromises.push(
 					axios
 						.get(reposURL + `&page=${i}`, {
 							headers: { Accept: 'application/vnd.github.mercy-preview+json' }
@@ -66,92 +85,71 @@ const ProjectForm = (props) => {
 								if (!repo.fork) {
 									if (repoOptions.includes(repo)) break
 
-									let tags = []
-									let languages = {}
-
-									// Have to make another fetch just to get the languages used
-									if (repo.language) {
-										promises.push(
-											axios.get(repo.languages_url).then((resp) => {
-												languages = resp.data
-
-												// Exclude languages that are a very small percentage of the codebase
-												// Due to templates with lots of bloat (rails)
-												// let totalLines = Object.values(languages).reduce((sum, num) => sum + num)
-												// const minPercent = 0.05
-												const minLines = 1200
-
-												for (let lang in languages) {
-													if (
-														// languages[lang] < minPercent * totalLines ||
-														languages[lang] < minLines
-													) {
-														delete languages[lang]
-													}
-												}
-
-												tags = [
-													...Object.keys(languages).map((lang) => lang.toLowerCase()),
-													...repo.topics
-												]
-											})
-										)
+									// To pre-fill form with selected repo
+									repos[repo.name] = {
+										display_name: namify(repo.name),
+										name: repo.name,
+										repo_url: repo.html_url,
+										description: repo.description ? repo.description : ''
 									}
 
-									// Another fetch to get the readme
+									// Fetches within fetches using data from outer fetches
+
+									// Get languages used and any topics
+									let languages = {}
+									promises.push(
+										axios.get(repo.languages_url).then((resp) => {
+											languages = resp.data
+
+											// Exclude languages that are a very small percentage of the codebase
+											// Due to templates with lots of bloat (rails)
+											// let totalLines = Object.values(languages).reduce((sum, num) => sum + num)
+											// const minPercent = 0.05
+											const minLines = 1200
+
+											for (let lang in languages) {
+												if (
+													// languages[lang] < minPercent * totalLines ||
+													languages[lang] < minLines
+												) {
+													delete languages[lang]
+												}
+											}
+
+											const tags = [
+												...Object.keys(languages).map((lang) => lang.toLowerCase()),
+												...repo.topics
+											]
+
+											repos[repo.name].tags = tags
+										})
+									)
+
+									// Get readme markdown
 									promises.push(
 										axios
 											.get(
-												`https://raw.githubusercontent.com/${username}/${repo.name}/master/README.md`
+												`https://raw.githubusercontent.com/${currentUser.username}/${repo.name}/master/README.md`
 											)
-											.catch(() => {
-												reposData[repo.name].markdown = ''
-											})
+											.catch(() => '')
 											.then((resp) => {
-												if (resp) {
-													reposData[repo.name].markdown = resp.data
-												}
+												if (resp) repos[repo.name].markdown = resp.data
+												else repos[repo.name].markdown = ''
 											})
 									)
-
-									repoOptions.push({
-										key: j,
-										text: repo.name,
-										value: repo.name
-									})
-
-									// To pre-fill form with selected repo
-									reposData[repo.name] = {
-										displayName: namify(repo.name),
-										name: repo.name,
-										repo_url: repo.html_url,
-										description: repo.description ? repo.description : '',
-										tags: tags
-									}
 								}
 							}
+							return axios.all(promises)
 						})
 				)
 			}
-
 			// After all the fetches finish
-			axios.all(promises).then(() => {
-				setRepoOptions(repoOptions)
-				sessionStorage.setItem('repos', JSON.stringify(reposData))
-				setIsLoading(false)
+			axios.all(promisesOfPromises).then(() => {
+				sessionStorage.setItem('repos', JSON.stringify(repos))
+				loadAllReposData(repos)
 			})
 		} else {
-			let options = []
-			for (let repo in reposData) {
-				options.push({
-					key: reposData[repo].name,
-					text: reposData[repo].name,
-					value: reposData[repo].name
-				})
-			}
-			console.log(options)
-			setRepoOptions(options)
-			setIsLoading(false)
+			loadAllReposData(repos)
 		}
 	}, [])
 
@@ -165,23 +163,23 @@ const ProjectForm = (props) => {
 
 	const handleRepoDropdownChange = (e) => {
 		console.log('repo change')
-
 		const repo = e.target.textContent
+
 		setSelectedRepo(repo)
 
 		let inputFields = {}
 
 		// Exclude tags array from inputs because we can't store arrays in db
-		for (let key in reposData[repo]) {
+		for (let key in repoData[repo]) {
 			if (key !== 'tags') {
-				inputFields[key] = reposData[repo][key]
+				inputFields[key] = repoData[repo][key]
 			}
 		}
 
 		setInputs((inputs) => ({
 			...inputFields
 		}))
-		setSelectedTags(JSON.parse(sessionStorage.repos).tags)
+		setSelectedTags(repoData[repo].tags)
 	}
 
 	const handleCancel = () => {
