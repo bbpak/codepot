@@ -7,7 +7,7 @@ import marked from 'marked'
 import { getHtml, namify } from '../helpers/formHelper'
 import useTagsDropdown from '../tags/useTagsDropdown'
 import useFormInput from './useFormInput'
-import ImageUploader from './ImageUploader'
+import ImageUploader from 'react-images-upload'
 import ReactMde from 'react-mde'
 import '../styles/form.css'
 import 'react-mde/lib/styles/css/react-mde-all.css'
@@ -21,6 +21,7 @@ const ProjectForm = (props) => {
 	const [ dropdownTags, setDropdownTags ] = useState([])
 	const [ markdownText, setMarkdownText ] = useState('')
 	const [ mdeIsPreview, setMdeIsPreview ] = useState(false)
+	const [ image, setImage ] = useState(null)
 
 	const { currentUser } = props
 
@@ -179,6 +180,10 @@ const ProjectForm = (props) => {
 		setMarkdownText(val)
 	}
 
+	const handleImageDrop = (files, URLs) => {
+		console.log(files, URLs)
+	}
+
 	const handleCancel = () => {
 		setRedirect(true)
 	}
@@ -226,7 +231,13 @@ const ProjectForm = (props) => {
 					{/* animated fadeInUp'> */}
 					<Form.Field className='project-form-image'>
 						<label className='label'>Cover Image</label>
-						<ImageUploader />
+						<ImageUploader
+							withIcon
+							buttonText='Upload image'
+							onChange={handleImageDrop}
+							imgExtension={[ '.jpg', '.gif', '.png' ]}
+							maxFileSize={5242880}
+						/>
 					</Form.Field>
 					<div className='project-form-details'>
 						{renderFormField('display_name')}
