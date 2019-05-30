@@ -1,13 +1,3 @@
-.ui.fluid.card {
-	background: none !important;
-	box-shadow: none !important;
-}
-
-.project-list {
-	height: 10 0vh;
-	overflow-y: auto;
-}
-
 .project-item {
 	margin: 0 0 0.5em 0 !important;
 	background-color: rgba(255, 255, 255, 0.4) !important;
@@ -27,4 +17,17 @@
 .project-item .project-tag {
 	color: white !important;
 	text-shadow: 1px 1px 1px black;
+}
+
+.project-filter {
+	z-index: 5;
+	width: inherit;
+	padding-right: 3em !important;
+	position: fixed;
+}
+
+@media only screen and (max-width: 991px) {
+	.project-filter {
+		padding-right: 5.5em !important;
+	}
 }

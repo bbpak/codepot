@@ -64,27 +64,33 @@ const ProjectsContainer = (props) => {
 		<React.Fragment>
 			{props.selectedProject && <ProjectModal />}
 			<Grid fluid doubling columns={2}>
-				<Grid.Column width={4} className='project-filter'>
-					<Input
-						fluid
-						name='search'
-						placeholder='project name'
-						value={inputs['search']}
-						onChange={(e, data) => handleSearchChange(e, data, handleInputChange)}
-						icon='search'
-					/>
-					<Dropdown
-						fluid
-						multiple
-						search
-						selection
-						placeholder='tags'
-						onChange={(e, data) => handleSearchChange(e, data, handleTagsChange)}
-						value={selectedTags}
-						onBlur={() => setDropdownTags(getTagOptions(selectedTags))}
-						onFocus={() => setDropdownTags(props.tagOptions)}
-						options={dropdownTags}
-					/>
+				<Grid.Column width={4}>
+					<div className='project-filter'>
+						<Input
+							fluid
+							name='search'
+							placeholder='project name'
+							value={inputs['search']}
+							onChange={(e, data) => handleSearchChange(e, data, handleInputChange)}
+							icon='search'
+						/>
+						<Dropdown
+							fluid
+							multiple
+							search
+							selection
+							placeholder='tags'
+							onChange={(e, data) => handleSearchChange(e, data, handleTagsChange)}
+							value={selectedTags}
+							onBlur={() => setDropdownTags(getTagOptions(selectedTags))}
+							onFocus={() => setDropdownTags(props.tagOptions)}
+							options={dropdownTags}
+						/>
+					</div>
+					<div style={{ visibility: 'hidden' }}>
+						<Input fluid />
+						<Dropdown fluid options={[]} />
+					</div>
 				</Grid.Column>
 				<Grid.Column width={12}>
 					<Item.Group className='project-list'>
@@ -94,15 +100,14 @@ const ProjectsContainer = (props) => {
 							))}
 
 						{/* THIS IS TO FORCE THE COLUMN TO ALWAYS BE FULL WIDTH EVEN WHEN EMPTY LIST */}
-						<Item className='project-item' style={{ visibility: 'hidden' }}>
+						<Item
+							className='project-item'
+							style={{ visibility: 'hidden', height: '0', padding: '0 !important' }}>
 							<Item.Content>
 								<Item.Description>
 									Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
 									incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-									exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-									irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-									pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-									deserunt mollit anim id est laborum.
+									exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 								</Item.Description>
 							</Item.Content>
 						</Item>

@@ -265,7 +265,7 @@ const ProjectForm = (props) => {
 	const renderForm = () => {
 		return (
 			<React.Fragment>
-				<div className='project-form'>
+				<div className='project-form animated fadeInUp'>
 					<Form.Field className='project-form-image'>
 						<label className='label'>Cover</label>
 						<ImageUploader
@@ -285,7 +285,7 @@ const ProjectForm = (props) => {
 							</div>
 						)}
 					</Form.Field>
-					<div className='project-form-details'>
+					<div className='project-form-details animated fadeInUp'>
 						{renderFormField('display_name')}
 						{renderFormField('repo_url')}
 						{renderFormField('project_url')}
@@ -328,11 +328,12 @@ const ProjectForm = (props) => {
 				onChange={handleRepoDropdownChange}
 				value={selectedRepo}
 				options={repoOptions}
+				disabled={isLoading}
 				loading={isLoading}
 				selection
 			/>
 			{selectedRepo && (
-				<Form className='animated fadeInUp'>
+				<Form>
 					{renderForm()}
 					<div className='project-form-buttons'>
 						{redirect && <Redirect to='/' />}
