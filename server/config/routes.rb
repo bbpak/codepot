@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  get '/user/:id/projects', to: 'users#projects'
-  get '/user/:username', to: 'users#show'
+  # get '/users/:id/projects', to: 'users#projects'
+  get '/users/:username', to: 'users#show'
   get '/projects/tags', to: 'projects#tags'
   post '/projects/tags', to: 'projects#create_tag'
   
