@@ -186,9 +186,12 @@ const ProjectForm = (props) => {
 		setMarkdownText(data.markdown)
 
 		// If we're getting data from object
-		let tags
-		if (typeof data.tags !== 'string') {
+		let tags = data.tags
+
+		if (data.tags.length > 0 && typeof data.tags[0] !== 'string') {
 			tags = data.tags.map((tag) => tag.name)
+		} else {
+			tags = data.tags
 		}
 
 		// This is to prevent loading 350+ tags on every re-render
