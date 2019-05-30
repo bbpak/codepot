@@ -128,6 +128,11 @@ devicon_data.each do |tag|
   end
 end
 
+# Custom tags 
+['game', 'game mod'].each do |name|
+  Tag.find_or_create_by!(name: name).update(color: default_color)
+end
+
 # Get associated colors for languages
 api_url = "https://raw.githubusercontent.com/github/linguist/master/lib/linguist/languages.yml"
 response = RestClient.get(api_url)
