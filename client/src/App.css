@@ -39,7 +39,7 @@ body {
 	overflow-y: auto;
 }
 
-.fullscreen.modal {
+.large.modal {
 	overflow-x: hidden;
 }
 

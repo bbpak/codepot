@@ -1,5 +1,5 @@
 class ProjectsController < ApplicationController
-  before_action :find_project, only: [:show, :update]
+  before_action :find_project, only: [:update]
   # before_action :authenticate_user!
   
   def index
@@ -13,6 +13,7 @@ class ProjectsController < ApplicationController
   end
 
   def show 
+    @project = Project.find_by(name: params[:project])
     project_json = project_json(@project)
     render json: project_json(@project)
   end

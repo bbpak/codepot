@@ -12,7 +12,7 @@ const Tag = ({ name, color, count }) => {
 
 const Tags = ({ tags, counts }) => {
 	if (!tags) return null
-	console.log(counts)
+
 	return (
 		<div className='project-tags'>
 			{tags.map((tag, i) => <Tag key={i} {...tag} count={counts ? counts[tag.name] : null} />)}

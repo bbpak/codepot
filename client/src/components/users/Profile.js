@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
-import { Grid, Segment, Image, Message, Loader } from 'semantic-ui-react'
+import { Grid, Segment, Image, Message, Loader, Button } from 'semantic-ui-react'
 import { uniqBy, countBy } from 'lodash'
 import Tags from '../tags/Tags'
 import axios from 'axios'
@@ -51,15 +51,14 @@ const Profile = ({ currentUser, match }) => {
 	}
 
 	return (
-		<Grid className='default-bg profile' container doubling columns={2}>
+		<Grid stretched className='default-bg profile' container doubling columns={2}>
 			<Grid.Row>
 				<Grid.Column width={4}>
 					<Segment>
 						<Image src={`https://avatars2.githubusercontent.com/u/${user.github_id}?v=4`} />
 						<h2>{user.username}</h2>
-					</Segment>
-					<Segment>
 						<Tags tags={getUserTags()} counts={getUserTagCounts()} />
+						{currentUser.username !== user.username && <Button primary>Follow</Button>}
 					</Segment>
 				</Grid.Column>
 				<Grid.Column width={12}>

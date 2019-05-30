@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
-import { Route } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
 import axios from 'axios'
-import { setCurrentUser, setProjects, setTagOptions } from './actions'
+import { setCurrentUser, selectProject, setProjects, setTagOptions } from './actions'
 import ProjectsContainer from './components/projects/ProjectsContainer'
 import NavBar from './components/navbar/NavBar'
 import ProjectForm from './components/forms/ProjectForm'
@@ -80,9 +80,12 @@ const App = (props) => {
 		<div classkey='App' className='App'>
 			<NavBar />
 			<main className='main-container'>
-				<Route exact path='/' component={ProjectsContainer} />
-				<Route exact path='/projects/new' component={ProjectForm} />
-				<Route exact path='/:username' component={Profile} />
+				<Switch>
+					<Route exact path='/' component={ProjectsContainer} />
+					<Route exact path='/projects/new' component={ProjectForm} />
+					<Route exact path='/:username' component={Profile} />
+					<Route exact path='/:username/:project' component={ProjectForm} />
+				</Switch>
 			</main>
 		</div>
 	)
@@ -95,4 +98,4 @@ const mapStateToProps = (state) => {
 		projects: state.projects
 	}
 }
-export default connect(mapStateToProps, { setCurrentUser, setProjects, setTagOptions })(App)
+export default connect(mapStateToProps, { setCurrentUser, setProjects, selectProject, setTagOptions })(App)

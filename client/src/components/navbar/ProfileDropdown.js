@@ -21,11 +21,12 @@ const ProfileDropdown = ({ currentUser, setCurrentUser }) => {
 	return (
 		<Dropdown trigger={trigger} icon={null}>
 			<Dropdown.Menu>
-				<Dropdown.Item>
-					<Link to={`/${currentUser.username}`}>
-						<Icon name='user' /> Profile
-					</Link>
-				</Dropdown.Item>
+				<Link to={`/${currentUser.username}`}>
+					<Dropdown.Item>
+						<Icon name='user' />&nbsp;&nbsp;&nbsp;Profile
+					</Dropdown.Item>
+				</Link>
+
 				<Dropdown.Item onClick={handleSignOut}>
 					<Icon name='sign out' /> Sign Out
 				</Dropdown.Item>
