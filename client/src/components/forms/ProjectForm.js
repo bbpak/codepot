@@ -170,6 +170,7 @@ const ProjectForm = (props) => {
 		}
 
 		setInputs(inputFields)
+		setMarkdownText(repoData[repo].markdown)
 
 		// This is to prevent loading 350+ tags on every re-render
 		setDropdownTags(getTagOptions(repoData[repo].tags))
@@ -271,19 +272,20 @@ const ProjectForm = (props) => {
 						<ImageUploader
 							singleImage
 							withIcon
+							withPreview
+							className={imageUrl ? 'restrict-upload' : ''}
 							buttonText='Upload Image'
 							onChange={handleUploadImage}
 							files={[ imageUrl ]}
 							imgExtension={[ '.jpg', '.gif', '.png' ]}
 							maxFileSize={5242880}
 						/>
-						{imageUrl && (
+						{/* {imageUrl && (
 							<div className='image-preview-container'>
-								<div className='image-preview' style={{ background: `url(${imageUrl})` }}>
-									{/*<Button icon='delete' color='red' />*/}
+								<div className='image-preview' style={{ background: `url(${imageUrl}) !important` }}>
 								</div>
 							</div>
-						)}
+						)} */}
 					</Form.Field>
 					<div className='project-form-details animated fadeInUp'>
 						{renderFormField('display_name')}
@@ -293,6 +295,7 @@ const ProjectForm = (props) => {
 						<Form.Field>
 							<label htmlFor='markdown'>Markdown</label>
 							<ReactMde
+								className='markdown-body'
 								value={markdownText}
 								onChange={handleMarkdownChange}
 								onTabChange={() => setMdeIsPreview(!mdeIsPreview)}

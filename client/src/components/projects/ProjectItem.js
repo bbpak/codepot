@@ -7,7 +7,9 @@ import Tags from '../tags/Tags'
 const ProjectItem = (props) => {
 	if (!props.project) return null
 
-	const image = props.project.image_url ? props.project.image_url : window._CLOUD_URL_ + 'n2tu5yh7jo6xojjwonic'
+	const image = props.project.image_id
+		? window._CLOUD_URL_ + props.project.image_id
+		: window._CLOUD_URL_ + 'n2tu5yh7jo6xojjwonic'
 
 	return (
 		<Item className='project-item' onClick={() => props.selectProject(props.project)}>

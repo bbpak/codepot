@@ -23,7 +23,7 @@
 .image-preview-container {
 	position: relative;
 	top: -2em;
-	background: #fff;
+	background-color: #fff;
 	box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.05);
 	position: relative;
 	border-radius: 10px;
@@ -38,4 +38,14 @@
 	position: relative;
 	left: 90%;
 	top: -1em;
+}
+
+.restrict-upload p,
+.restrict-upload button {
+	opacity: 0.5;
+	pointer-events: none;
+}
+
+.markdown-body {
+	background-color: white;
 }
