@@ -1,5 +1,6 @@
 import React from 'react'
 import { Label } from 'semantic-ui-react'
+import { sortBy } from 'lodash'
 
 const Tag = ({ name, color, count }) => {
 	return (
@@ -12,6 +13,7 @@ const Tag = ({ name, color, count }) => {
 
 const Tags = ({ tags, counts }) => {
 	if (!tags) return null
+	tags = sortBy(tags, (tag) => tag.name)
 
 	return (
 		<div className='project-tags'>

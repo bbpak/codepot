@@ -85,62 +85,62 @@ const ProjectForm = (props) => {
 									const repo = resp.data[j]
 
 									// Don't include forks
-									if (!repo.fork) {
-										if (repoOptions.includes(repo)) break
+									// if (!repo.fork) {
+									if (repoOptions.includes(repo)) break
 
-										// To pre-fill form with selected repo
-										repos[repo.name] = {
-											display_name: namify(repo.name),
-											name: repo.name,
-											repo_url: repo.html_url,
-											description: repo.description ? repo.description : ''
-										}
-
-										// Fetches within fetches using data from outer fetches
-
-										// Get languages used and any topics
-										let languages = {}
-										promises.push(
-											axios.get(repo.languages_url).then((resp) => {
-												languages = resp.data
-
-												// Exclude languages that are a very small percentage of the codebase
-												// Due to templates with lots of bloat (rails)
-												// let totalLines = Object.values(languages).reduce((sum, num) => sum + num)
-												// const minPercent = 0.05
-												const minLines = 1200
-
-												for (let lang in languages) {
-													if (
-														// languages[lang] < minPercent * totalLines ||
-														languages[lang] < minLines
-													) {
-														delete languages[lang]
-													}
-												}
-
-												const tags = [
-													...Object.keys(languages).map((lang) => lang.toLowerCase()),
-													...repo.topics
-												]
-
-												repos[repo.name].tags = tags
-											})
-										)
-
-										// Get readme markdown
-										promises.push(
-											axios
-												.get(
-													`https://raw.githubusercontent.com/${currentUser.username}/${repo.name}/master/README.md`
-												)
-												.catch(() => '')
-												.then((resp) => {
-													if (resp) repos[repo.name].markdown = resp.data
-													else repos[repo.name].markdown = ''
-												})
-										)
+									// To pre-fill form with selected repo
+									repos[repo.name] = {
+										display_name: namify(repo.name),
+										name: repo.name,
+										repo_url: repo.html_url,
+										description: repo.description ? repo.description : ''
 									}
+
+									// Fetches within fetches using data from outer fetches
+
+									// Get languages used and any topics
+									let languages = {}
+									promises.push(
+										axios.get(repo.languages_url).then((resp) => {
+											languages = resp.data
+
+											// Exclude languages that are a very small percentage of the codebase
+											// Due to templates with lots of bloat (rails)
+											// let totalLines = Object.values(languages).reduce((sum, num) => sum + num)
+											// const minPercent = 0.05
+											const minLines = 1200
+
+											for (let lang in languages) {
+												if (
+													// languages[lang] < minPercent * totalLines ||
+													languages[lang] < minLines
+												) {
+													delete languages[lang]
+												}
+											}
+
+											const tags = [
+												...Object.keys(languages).map((lang) => lang.toLowerCase()),
+												...repo.topics
+											]
+
+											repos[repo.name].tags = tags
+										})
+									)
+
+									// Get readme markdown
+									promises.push(
+										axios
+											.get(
+												`https://raw.githubusercontent.com/${currentUser.username}/${repo.name}/master/README.md`
+											)
+											.catch(() => '')
+											.then((resp) => {
+												if (resp) repos[repo.name].markdown = resp.data
+												else repos[repo.name].markdown = ''
+											})
+									)
+									//}
 								}
 								return axios.all(promises)
 							})

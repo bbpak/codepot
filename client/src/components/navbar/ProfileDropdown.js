@@ -9,6 +9,7 @@ const ProfileDropdown = ({ currentUser, setCurrentUser }) => {
 		// Clear cookie for user object
 		document.cookie = 'current_user=; expires=Thu, 01 Jan 1970 00:00:00 UTC;'
 		setCurrentUser(null)
+		sessionStorage.clear()
 	}
 
 	const trigger = (
