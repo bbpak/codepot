@@ -21,7 +21,8 @@ const ProjectForm = (props) => {
 	const [ dropdownTags, setDropdownTags ] = useState([])
 	const [ markdownText, setMarkdownText ] = useState('')
 	const [ mdeIsPreview, setMdeIsPreview ] = useState(false)
-	const [ image, setImage ] = useState('')
+	const [ imageUrl, setImageUrl ] = useState('')
+	const [ imageFile, setImageFile ] = useState(null)
 
 	const { currentUser } = props
 
@@ -47,6 +48,7 @@ const ProjectForm = (props) => {
 		setIsLoading(false)
 	}
 
+	// Make multiple fetches to grab all repositories
 	useEffect(() => {
 		// Use sessionStorage to avoid redundant fetches for (mostly) static data
 		let repos = JSON.parse(sessionStorage.getItem('repos'))
@@ -59,7 +61,7 @@ const ProjectForm = (props) => {
 			let promisesOfPromises = [] // Yes it's ridiculous
 
 			// Go through 300 repos w/ 100 per page limit for FI students with a ton of labs...
-			// Switch to GraphQL stretch goal 🤞
+			// Switch to GraphQL stretch goal 🤞 (still 100 per page limit)
 			for (let i = 1; i <= 3; i++) {
 				// Fetch user's public github repos
 				promisesOfPromises.push(
@@ -154,7 +156,6 @@ const ProjectForm = (props) => {
 	}
 
 	const handleRepoDropdownChange = (e) => {
-		console.log('repo change')
 		const repo = e.target.textContent
 
 		setSelectedRepo(repo)
@@ -169,34 +170,19 @@ const ProjectForm = (props) => {
 		}
 
 		setInputs(inputFields)
-		setMarkdownText(repoData[repo].markdown)
 
 		// This is to prevent loading 350+ tags on every re-render
 		setDropdownTags(getTagOptions(repoData[repo].tags))
 		setSelectedTags(repoData[repo].tags)
 	}
 
-	const handleMarkdownTextChange = (val) => {
-		setMarkdownText(val)
+	const handleUploadImage = (files, URLs) => {
+		setImageUrl(URLs[URLs.length - 1])
+		setImageFile(files[files.length - 1])
 	}
 
-	const handleUploadImage = (files, URLs) => {
-		setImage(URLs[URLs.length - 1])
-		// files.map((file) => {
-		// 	const formData = new FormData()
-		// 	formData.append('file', file)
-		// 	formData.append('api_key', process.env.REACT_APP_CLOUD_API_KEY)
-		// 	formData.append('upload_preset', 'encmp24r')
-		// 	formData.append('timestamp', (Date.now() / 1000) | 0)
-		// 	return axios
-		// 		.post(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/image/upload`, formData, {
-		// 			headers: { 'X-Requested-With': 'XMLHttpRequest' }
-		// 		})
-		// 		.then((resp) => {
-		// 			axios.post(window._API_URL_ + 'projects')
-		// 			setImage(resp.data.public_id)
-		// 		})
-		// })
+	const handleMarkdownChange = (val) => {
+		setMarkdownText(val)
 	}
 
 	const handleCancel = () => {
@@ -204,21 +190,58 @@ const ProjectForm = (props) => {
 	}
 
 	const handleSubmit = (e) => {
-		console.log('submit')
 		e.preventDefault()
-		// Create project
-		axios
-			.post(window._API_URL_ + 'projects', {
-				headers: {
-					'Content-Type': 'application/json'
-					// Authorization: `Bearer ${props.currentUser.token}`
-				},
-				project: { ...inputs, user_id: props.currentUser.id },
-				tags: selectedTags
-			})
-			.then((data) => {
-				setRedirect(true)
-			})
+
+		if (imageFile) {
+			// Upload image to cloudinary
+			const formData = new FormData()
+			formData.append('file', imageFile)
+			formData.append('api_key', process.env.REACT_APP_CLOUD_API_KEY)
+			formData.append('upload_preset', 'encmp24r')
+			formData.append('timestamp', (Date.now() / 1000) | 0)
+			return axios
+				.post(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/image/upload`, formData, {
+					headers: { 'X-Requested-With': 'XMLHttpRequest' }
+				})
+				.then((resp) => {
+					// Create project
+					axios
+						.post(window._API_URL_ + 'projects', {
+							headers: {
+								'Content-Type': 'application/json'
+								// Authorization: `Bearer ${props.currentUser.token}`
+							},
+							project: {
+								...inputs,
+								markdown: markdownText,
+								image_id: resp.data.public_id,
+								user_id: props.currentUser.id
+							},
+							tags: selectedTags
+						})
+						.then((data) => {
+							setRedirect(true)
+						})
+				})
+		} else {
+			axios
+				.post(window._API_URL_ + 'projects', {
+					headers: {
+						'Content-Type': 'application/json'
+						// Authorization: `Bearer ${props.currentUser.token}`
+					},
+					project: {
+						...inputs,
+						markdown: markdownText,
+						image_id: '',
+						user_id: props.currentUser.id
+					},
+					tags: selectedTags
+				})
+				.then((data) => {
+					setRedirect(true)
+				})
+		}
 	}
 
 	const renderFormField = (name, type = 'text') => {
@@ -243,7 +266,6 @@ const ProjectForm = (props) => {
 		return (
 			<React.Fragment>
 				<div className='project-form'>
-					{/* animated fadeInUp'> */}
 					<Form.Field className='project-form-image'>
 						<label className='label'>Cover</label>
 						<ImageUploader
@@ -251,14 +273,14 @@ const ProjectForm = (props) => {
 							withIcon
 							buttonText='Upload Image'
 							onChange={handleUploadImage}
-							files={[ image ]}
+							files={[ imageUrl ]}
 							imgExtension={[ '.jpg', '.gif', '.png' ]}
 							maxFileSize={5242880}
 						/>
-						{image && (
+						{imageUrl && (
 							<div className='image-preview-container'>
-								<div className='image-preview' style={{ background: `url(${image})` }}>
-									<Button icon='delete' color='red' />
+								<div className='image-preview' style={{ background: `url(${imageUrl})` }}>
+									{/*<Button icon='delete' color='red' />*/}
 								</div>
 							</div>
 						)}
@@ -272,7 +294,7 @@ const ProjectForm = (props) => {
 							<label htmlFor='markdown'>Markdown</label>
 							<ReactMde
 								value={markdownText}
-								onChange={handleMarkdownTextChange}
+								onChange={handleMarkdownChange}
 								onTabChange={() => setMdeIsPreview(!mdeIsPreview)}
 								selectedTab={mdeIsPreview ? 'preview' : 'write'}
 								generateMarkdownPreview={(md) => Promise.resolve(marked(md))}
@@ -309,17 +331,18 @@ const ProjectForm = (props) => {
 				loading={isLoading}
 				selection
 			/>
-			<Form>
-				{selectedRepo || (true && renderForm())}
-
-				<div className='project-form-buttons'>
-					{redirect && <Redirect to='/' />}
-					<Button primary onClick={handleSubmit} type='submit'>
-						Create Project
-					</Button>
-					<Button secondary>Cancel</Button>
-				</div>
-			</Form>
+			{selectedRepo && (
+				<Form className='animated fadeInUp'>
+					{renderForm()}
+					<div className='project-form-buttons'>
+						{redirect && <Redirect to='/' />}
+						<Button primary onClick={handleSubmit} type='submit'>
+							Create Project
+						</Button>
+						<Button secondary>Cancel</Button>
+					</div>
+				</Form>
+			)}
 		</div>
 	)
 }

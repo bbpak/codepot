@@ -9,9 +9,7 @@ import { getHtml } from '../helpers/formHelper'
 const ProjectModal = ({ selectedProject, selectProject }) => {
 	const [ projectReadme, setProjectReadme ] = useState(false)
 
-	const image = selectedProject.image_url
-		? selectedProject.image_url
-		: 'https://react.semantic-ui.com/images/wireframe/image.png'
+	const image = selectedProject.image_url ? selectedProject.image_url : window._CLOUD_URL_ + 'n2tu5yh7jo6xojjwonic'
 
 	return (
 		<Modal open closeOnDimmerClick closeIcon size='fullscreen' onClose={() => selectProject(null)}>

@@ -1,6 +1,9 @@
+body {
+	overflow: hidden;
+}
+
 .App {
 	overflow: hidden;
-	height: 100vh;
 }
 
 .main-container {
@@ -10,7 +13,6 @@
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
-	overflow-y: auto;
 }
 
 body {

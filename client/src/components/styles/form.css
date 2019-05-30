@@ -1,6 +1,6 @@
 .project-form-container {
 	min-width: 60%;
-	min-height: 175%;
+	min-height: 100%;
 }
 
 .project-form-image,
@@ -33,7 +33,6 @@
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
-	margin: 10px auto;
 }
 
 .image-preview .button {

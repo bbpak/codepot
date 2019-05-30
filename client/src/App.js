@@ -9,6 +9,7 @@ import ProjectForm from './components/forms/ProjectForm'
 import './App.css'
 
 window._API_URL_ = 'http://localhost:3000/'
+window._CLOUD_URL_ = 'https://res.cloudinary.com/crudhub/image/upload/'
 
 const App = (props) => {
 	// Make select options for tags from tags data
@@ -34,6 +35,23 @@ const App = (props) => {
 		} else {
 			props.setTagOptions(makeTagOptions(allTags))
 		}
+
+		// Fetch all projects
+		axios.get(window._API_URL_ + 'projects').then((resp) => {
+			props.setProjects(resp.data)
+		})
+
+		// let allProjects = JSON.parse(sessionStorage.getItem('projects'))
+
+		// if (!allProjects) {
+		// 	// Fetch all projects for now, set limits if there are a lot
+		// 	axios.get(window._API_URL_ + 'projects').then((resp) => {
+		// 		props.setProjects(resp.data)
+		// 		sessionStorage.setItem('projects', JSON.stringify(resp.data))
+		// 	})
+		// } else {
+		// 	props.setProjects(allProjects)
+		// }
 	}, [])
 
 	const getUserFromCookies = () => {
