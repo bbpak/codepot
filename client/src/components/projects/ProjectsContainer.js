@@ -2,13 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Input, Grid, Item, Dropdown } from 'semantic-ui-react'
 import { includes, filter, difference } from 'lodash'
-import axios from 'axios'
-import ProjectItem from './ProjectItem'
-import ProjectModal from './ProjectModal'
-import { selectProject, setProjects } from '../../actions'
-import '../styles/projects.css'
+import { setProjects } from '../../actions'
+import ProjectList from './ProjectList'
 import useFormInput from '../forms/useFormInput'
 import useTagsDropdown from '../tags/useTagsDropdown'
+import '../styles/projects.css'
 
 const ProjectsContainer = (props) => {
 	const [ results, setResults ] = useState(props.projects)
@@ -63,7 +61,6 @@ const ProjectsContainer = (props) => {
 
 	return (
 		<React.Fragment>
-			{props.selectedProject && <ProjectModal />}
 			<Grid doubling columns={2}>
 				<Grid.Column width={4}>
 					<div className='project-filter'>
@@ -95,23 +92,7 @@ const ProjectsContainer = (props) => {
 				</Grid.Column>
 				<Grid.Column width={12}>
 					<Item.Group className='project-list'>
-						{results &&
-							results.map((project, i) => (
-								<ProjectItem selectProject={props.selectProject} project={project} key={i} />
-							))}
-
-						{/* THIS IS TO FORCE THE COLUMN TO ALWAYS BE FULL WIDTH EVEN WHEN EMPTY LIST */}
-						<Item
-							className='project-item'
-							style={{ visibility: 'hidden', height: '0', padding: '0 !important' }}>
-							<Item.Content>
-								<Item.Description>
-									Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-									incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-									exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-								</Item.Description>
-							</Item.Content>
-						</Item>
+						<ProjectList projects={results} />
 					</Item.Group>
 				</Grid.Column>
 			</Grid>
@@ -122,9 +103,8 @@ const ProjectsContainer = (props) => {
 const mapStateToProps = (state) => {
 	return {
 		projects: state.projects,
-		tagOptions: state.tagOptions,
-		selectedProject: state.selectedProject
+		tagOptions: state.tagOptions
 	}
 }
 
-export default connect(mapStateToProps, { selectProject, setProjects })(ProjectsContainer)
+export default connect(mapStateToProps, { setProjects })(ProjectsContainer)
