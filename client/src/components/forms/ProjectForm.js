@@ -339,7 +339,7 @@ const ProjectForm = (props) => {
 				<Form>
 					{renderForm()}
 					<div className='project-form-buttons'>
-						{redirect && <Redirect to='/' />}
+						{redirect && <Redirect to={`/${currentUser.username}`} />}
 						<Button primary onClick={handleSubmit} type='submit'>
 							Create Project
 						</Button>

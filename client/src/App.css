@@ -27,7 +27,8 @@ body {
 	text-shadow: 1px 1px 1px black;
 }
 
-.default-bg {
+.default-bg,
+.segment {
 	background-color: rgba(255, 255, 255, 0.4) !important;
 }
 
@@ -40,6 +41,15 @@ body {
 
 .fullscreen.modal {
 	overflow-x: hidden;
+}
+
+.no-scroll {
+	overflow-y: hidden;
+}
+
+.profile {
+	height: calc(100vh - 50px - 3em);
+	overflow: hidden;
 }
 
 a {

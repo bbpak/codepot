@@ -92,7 +92,7 @@ const ProjectsContainer = (props) => {
 				</Grid.Column>
 				<Grid.Column width={12}>
 					<Item.Group className='project-list'>
-						<ProjectList projects={results} />
+						<ProjectList projects={results} usePlaceholder />
 					</Item.Group>
 				</Grid.Column>
 			</Grid>
