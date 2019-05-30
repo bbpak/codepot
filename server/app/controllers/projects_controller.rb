@@ -6,15 +6,15 @@ class ProjectsController < ApplicationController
     @projects = Project.all
     projects_json = []
     @projects.each do |project|
-      projects_json << add_owner_to_project_json(project)
+      projects_json << project_json(project)
     end
 
     render json: projects_json
   end
 
   def show 
-    project_json = add_owner_to_project_json(@project)
-    render json: project_json
+    project_json = project_json(@project)
+    render json: project_json(@project)
   end
 
   def create
@@ -65,7 +65,7 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
   end
 
-  def add_owner_to_project_json(project)
-    project.attributes.merge({owner: project.user.username})
+  def project_json(project)
+    project.attributes.merge({owner: project.user.username, tags: project.tags})
   end
 end
