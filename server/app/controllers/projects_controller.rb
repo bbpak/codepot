@@ -12,8 +12,8 @@ class ProjectsController < ApplicationController
     render json: projects_json
   end
 
-  def show 
-    @project = Project.find_by(name: params[:project])
+  def show_by_name
+    @project = Project.find_by(name: params[:project_name])
     project_json = project_json(@project)
     render json: project_json(@project)
   end
@@ -35,8 +35,26 @@ class ProjectsController < ApplicationController
     end
   end
   
-  def update
-    @project.update(project_params)
+  def update_by_name
+    @project = Project.find_by(name: params[:project_name])
+    @project.update({
+      display_name: project_params[:display_name],
+      repo_url: project_params[:repo_url],
+      project_url: project_params[:project_url],
+      description: project_params[:description],
+      image_id: project_params[:image_id],
+      markdown: project_params[:markdown]
+    })
+
+    # Update tags
+    @project.tags.destroy_all
+    params[:tags].each do |tag_name|
+      tag = Tag.find_by(name: tag_name)
+      if tag
+        ProjectTag.create(project_id: @project.id, tag_id: tag.id)
+      end
+    end
+
     if @project.save
       render json: @project, status: :accepted
     else

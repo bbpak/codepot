@@ -177,7 +177,7 @@ const ProjectForm = (props) => {
 
 		// Get just input fields
 		for (let key in data) {
-			if (key !== 'tags' && key !== 'markdown') {
+			if (key !== 'tags' && key !== 'markdown' && key !== 'owner') {
 				inputFields[key] = data[key]
 			}
 		}
@@ -265,7 +265,7 @@ const ProjectForm = (props) => {
 		} else {
 			if (isEditMode) {
 				axios
-					.post(window._API_URL_ + 'projects', {
+					.patch(window._API_URL_ + 'projects/' + selectedRepo, {
 						headers: {
 							'Content-Type': 'application/json'
 							// Authorization: `Bearer ${props.currentUser.token}`
