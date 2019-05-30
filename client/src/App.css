@@ -1,5 +1,6 @@
 body {
 	overflow: hidden;
+	background-image: url('gplaypattern_@2X.png');
 }
 
 .App {
@@ -7,16 +8,13 @@ body {
 }
 
 .main-container {
+	background-color: rgba(48, 72, 122, 0.5);
 	height: 100%;
 	padding: 2.5em;
 	margin-top: 50px;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
-}
-
-body {
-	background-color: rgb(150, 167, 185);
 }
 
 .disabled {

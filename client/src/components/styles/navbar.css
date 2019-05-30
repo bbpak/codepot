@@ -1,5 +1,5 @@
 #nav-bar {
-	background-color: rgb(32, 18, 65);
+	background-image: linear-gradient(135deg, #4e2675 0%, #201241 100%);
 	color: white;
 	height: 50px;
 	position: fixed;

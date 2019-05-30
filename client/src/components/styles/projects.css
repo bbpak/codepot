@@ -4,13 +4,13 @@
 }
 
 .project-list {
-	height: 85vh;
+	height: 10 0vh;
 	overflow-y: auto;
 }
 
 .project-item {
 	margin: 0 0 0.5em 0 !important;
-	background-color: rgba(255, 255, 255, 0.5) !important;
+	background-color: rgba(255, 255, 255, 0.4) !important;
 	padding: 1em !important;
 	width: 100%;
 }
