@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { selectProject } from '../../actions'
 import { Modal, Image } from 'semantic-ui-react'
 import { getHtml } from '../helpers/formHelper'
+import { Link } from 'react-router-dom'
 
 import '../styles/github-md.css'
 import Tags from '../tags/Tags'
@@ -24,7 +25,12 @@ const ProjectModal = ({ selectedProject, selectProject }) => {
 			<Modal.Content image>
 				<div>
 					<Image size='large' wrapped src={image} />
-					<p>Owner: {selectedProject.user.username}</p>
+					<p>
+						Owner:{' '}
+						<strong>
+							<Link to={`/${selectedProject.owner}`}>{selectedProject.owner}</Link>
+						</strong>
+					</p>
 					<Tags {...selectedProject} />
 				</div>
 				<Modal.Description>

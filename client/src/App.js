@@ -81,7 +81,7 @@ const App = (props) => {
 			<NavBar />
 			<main className='main-container'>
 				<Route exact path='/' component={ProjectsContainer} />
-				<Route exact path='/new-project' component={ProjectForm} />
+				<Route exact path='/projects/new' component={ProjectForm} />
 				<Route exact path='/:username' component={Profile} />
 			</main>
 		</div>

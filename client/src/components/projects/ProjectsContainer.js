@@ -18,7 +18,8 @@ const ProjectsContainer = (props) => {
 
 	useEffect(
 		() => {
-			console.log(selectedTags)
+			window.scrollTo(0, 0)
+
 			if (!inputs['search']) {
 				setResults(props.projects)
 
@@ -63,7 +64,7 @@ const ProjectsContainer = (props) => {
 	return (
 		<React.Fragment>
 			{props.selectedProject && <ProjectModal />}
-			<Grid fluid doubling columns={2}>
+			<Grid doubling columns={2}>
 				<Grid.Column width={4}>
 					<div className='project-filter'>
 						<Input

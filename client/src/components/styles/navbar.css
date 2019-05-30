@@ -26,6 +26,7 @@
 .profile-dd {
 	display: flex;
 	flex-direction: row;
+	margin-right: 0.2em;
 }
 
 .profile-dd span {

@@ -10,6 +10,7 @@ const Tag = ({ name, color }) => {
 }
 
 const Tags = ({ tags }) => {
+	if (!tags) return null
 	return <div className='project-tags'>{tags.map((tag, i) => <Tag key={i} {...tag} />)}</div>
 }
 

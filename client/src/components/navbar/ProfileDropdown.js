@@ -1,5 +1,6 @@
 import React from 'react'
-import { Dropdown } from 'semantic-ui-react'
+import { Dropdown, Icon } from 'semantic-ui-react'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { setCurrentUser } from '../../actions'
 
@@ -17,9 +18,20 @@ const ProfileDropdown = ({ currentUser, setCurrentUser }) => {
 		</div>
 	)
 
-	const options = [ { key: 'sign-out', text: 'Sign Out', icon: 'sign out', onClick: handleSignOut } ]
-
-	return <Dropdown trigger={trigger} options={options} icon={null} />
+	return (
+		<Dropdown trigger={trigger} icon={null}>
+			<Dropdown.Menu>
+				<Dropdown.Item>
+					<Link to={`/${currentUser.username}`}>
+						<Icon name='user' /> Profile
+					</Link>
+				</Dropdown.Item>
+				<Dropdown.Item onClick={handleSignOut}>
+					<Icon name='sign out' /> Sign Out
+				</Dropdown.Item>
+			</Dropdown.Menu>
+		</Dropdown>
+	)
 }
 
 const mapStateToProps = (state) => {
