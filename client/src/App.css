@@ -21,3 +21,8 @@ body {
 	opacity: 0.5;
 	pointer-events: none;
 }
+
+.project-tag {
+	color: white !important;
+	text-shadow: 1px 1px 1px black;
+}

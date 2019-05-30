@@ -16,11 +16,11 @@
 }
 
 .logo {
-	padding: 12px;
+	margin: 0.5em 0.5em 0.5em 1em;
 }
 
 .logo > img {
-	height: 25px;
+	height: 35px;
 }
 
 .profile-dd {

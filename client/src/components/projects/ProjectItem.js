@@ -15,7 +15,7 @@ const ProjectItem = (props) => {
 		<Item className='project-item' onClick={() => props.selectProject(props.project)}>
 			<Item.Image size='medium' src={image} />
 			<Item.Content>
-				<Item.Header>{props.project.name}</Item.Header>
+				<Item.Header>{props.project.display_name}</Item.Header>
 				<Item.Description>{props.project.description}</Item.Description>
 				<Item.Extra>
 					<Tags {...props.project} />

@@ -20,12 +20,17 @@ const ProjectModal = ({ selectedProject, selectProject }) => {
 
 	return (
 		<Modal open closeOnDimmerClick closeIcon size='fullscreen' onClose={() => selectProject(null)}>
-			<Modal.Header>{selectedProject.name}</Modal.Header>
+			<Modal.Header>{selectedProject.display_name}</Modal.Header>
 			<Modal.Content image>
-				<Image size='large' wrapped src={image} />
-				<Tags {...selectedProject} />
-				{projectReadme && <div dangerouslySetInnerHTML={projectReadme} className='project-readme' />}
-				<div className='markdown-container' dangerouslySetInnerHTML={markdown} />
+				<div>
+					<Image size='large' wrapped src={image} />
+					<p>Owner: {selectedProject.user.username}</p>
+					<Tags {...selectedProject} />
+				</div>
+				<Modal.Description>
+					{projectReadme && <div dangerouslySetInnerHTML={projectReadme} className='project-readme' />}
+					<div className='markdown-container' dangerouslySetInnerHTML={markdown} />
+				</Modal.Description>
 			</Modal.Content>
 		</Modal>
 	)

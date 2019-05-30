@@ -6,6 +6,7 @@ import { setCurrentUser, setProjects, setTagOptions } from './actions'
 import ProjectsContainer from './components/projects/ProjectsContainer'
 import NavBar from './components/navbar/NavBar'
 import ProjectForm from './components/forms/ProjectForm'
+import Profile from './components/users/Profile'
 import './App.css'
 
 window._API_URL_ = 'http://localhost:3000/'
@@ -81,6 +82,7 @@ const App = (props) => {
 			<main className='main-container'>
 				<Route exact path='/' component={ProjectsContainer} />
 				<Route exact path='/new-project' component={ProjectForm} />
+				<Route exact path='/:username' component={Profile} />
 			</main>
 		</div>
 	)

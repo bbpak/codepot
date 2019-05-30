@@ -14,9 +14,11 @@
 	max-height: calc(230px - 2em);
 }
 
-.project-item .project-tag {
-	color: white !important;
-	text-shadow: 1px 1px 1px black;
+.project-item .image {
+	height: 300px !important;
+	display: flex !important;
+	align-items: center;
+	background-color: rgba(0, 0, 0, 0.5);
 }
 
 .project-filter {
@@ -27,8 +29,8 @@
 }
 
 .markdown-container {
-	width: 100%;
-	margin: 0 3em 3em 3em;
+	width: 90%;
+	margin: 0 0 3em 3em;
 	max-height: 70vh;
 	overflow-y: auto;
 }
