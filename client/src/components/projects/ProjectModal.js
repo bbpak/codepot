@@ -27,6 +27,7 @@ const ProjectModal = ({ currentUser, selectedProject, selectProject }) => {
 		<Modal open closeOnDimmerClick closeIcon size='large' onClose={() => selectProject(null)}>
 			<Modal.Header>
 				{selectedProject.display_name}
+
 				<span style={{ float: 'right' }}>
 					<Link to={`/${currentUser.username}/${selectedProject.name}`}>
 						<Button circular size='mini' color='teal'>
@@ -37,9 +38,12 @@ const ProjectModal = ({ currentUser, selectedProject, selectProject }) => {
 			</Modal.Header>
 			<Modal.Content image>
 				<div>
-					<Image size='large' wrapped src={image} />
+					<a target='_blank' href={selectedProject.project_url}>
+						<Image size='large' wrapped src={image} />
+					</a>
+
 					<p>
-						Owner:{' '}
+						Owner:
 						<strong>
 							<Link to={`/${selectedProject.owner}`}>{selectedProject.owner}</Link>
 						</strong>

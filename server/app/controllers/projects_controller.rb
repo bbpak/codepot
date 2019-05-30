@@ -14,7 +14,6 @@ class ProjectsController < ApplicationController
 
   def show_by_name
     @project = Project.find_by(name: params[:project_name])
-    project_json = project_json(@project)
     render json: project_json(@project)
   end
 
@@ -85,6 +84,6 @@ class ProjectsController < ApplicationController
   end
 
   def project_json(project)
-    project.attributes.merge({owner: project.user.username, tags: project.tags})
+    project.attributes.merge({owner: User.find(project.user_id).username, tags: project.tags})
   end
 end
