@@ -185,9 +185,15 @@ const ProjectForm = (props) => {
 		setInputs(inputFields)
 		setMarkdownText(data.markdown)
 
+		// If we're getting data from object
+		let tags
+		if (typeof data.tags !== 'string') {
+			tags = data.tags.map((tag) => tag.name)
+		}
+
 		// This is to prevent loading 350+ tags on every re-render
-		setDropdownTags(getTagOptions(data.tags))
-		setSelectedTags(data.tags)
+		setDropdownTags(getTagOptions(tags))
+		setSelectedTags(tags)
 	}
 
 	const handleUploadImage = (files, URLs) => {
@@ -200,7 +206,7 @@ const ProjectForm = (props) => {
 	}
 
 	const handleCancel = () => {
-		setRedirect(true)
+		window.history.back()
 	}
 
 	const handleSubmit = (e) => {
@@ -218,6 +224,25 @@ const ProjectForm = (props) => {
 					headers: { 'X-Requested-With': 'XMLHttpRequest' }
 				})
 				.then((resp) => {
+					if (isEditMode) {
+						// Update project
+						axios
+							.patch(window._API_URL_ + 'projects/' + selectedRepo, {
+								headers: {
+									'Content-Type': 'application/json'
+									// Authorization: `Bearer ${props.currentUser.token}`
+								},
+								project: {
+									...inputs,
+									markdown: markdownText,
+									image_id: resp.data.public_id
+								},
+								tags: selectedTags
+							})
+							.then((data) => {
+								setRedirect(true)
+							})
+					}
 					// Create project
 					axios
 						.post(window._API_URL_ + 'projects', {
@@ -238,23 +263,41 @@ const ProjectForm = (props) => {
 						})
 				})
 		} else {
-			axios
-				.post(window._API_URL_ + 'projects', {
-					headers: {
-						'Content-Type': 'application/json'
-						// Authorization: `Bearer ${props.currentUser.token}`
-					},
-					project: {
-						...inputs,
-						markdown: markdownText,
-						image_id: '',
-						user_id: props.currentUser.id
-					},
-					tags: selectedTags
-				})
-				.then((data) => {
-					setRedirect(true)
-				})
+			if (isEditMode) {
+				axios
+					.post(window._API_URL_ + 'projects', {
+						headers: {
+							'Content-Type': 'application/json'
+							// Authorization: `Bearer ${props.currentUser.token}`
+						},
+						project: {
+							...inputs,
+							markdown: markdownText
+						},
+						tags: selectedTags
+					})
+					.then((data) => {
+						setRedirect(true)
+					})
+			} else {
+				axios
+					.post(window._API_URL_ + 'projects', {
+						headers: {
+							'Content-Type': 'application/json'
+							// Authorization: `Bearer ${props.currentUser.token}`
+						},
+						project: {
+							...inputs,
+							markdown: markdownText,
+							image_id: '',
+							user_id: props.currentUser.id
+						},
+						tags: selectedTags
+					})
+					.then((data) => {
+						setRedirect(true)
+					})
+			}
 		}
 	}
 
@@ -279,7 +322,7 @@ const ProjectForm = (props) => {
 	const renderForm = () => {
 		return (
 			<React.Fragment>
-				<div className='project-form animated fadeInUp'>
+				<div className='project-form '>
 					<Form.Field className='project-form-image'>
 						<label className='label'>Cover</label>
 						<ImageUploader
@@ -300,7 +343,7 @@ const ProjectForm = (props) => {
 							</div>
 						)} */}
 					</Form.Field>
-					<div className='project-form-details animated fadeInUp'>
+					<div className='project-form-details '>
 						{renderFormField('display_name')}
 						{renderFormField('repo_url')}
 						{renderFormField('project_url')}
@@ -360,9 +403,11 @@ const ProjectForm = (props) => {
 					<div className='project-form-buttons'>
 						{redirect && <Redirect to={`/${currentUser.username}`} />}
 						<Button primary onClick={handleSubmit} type='submit'>
-							Create Project
+							{isEditMode ? 'Save' : 'Create Project'}
 						</Button>
-						<Button secondary>Cancel</Button>
+						<Button onClick={handleCancel} secondary>
+							Cancel
+						</Button>
 					</div>
 				</Form>
 			)}
