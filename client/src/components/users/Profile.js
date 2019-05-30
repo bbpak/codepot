@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
-import { Grid, Segment, Image } from 'semantic-ui-react'
+import { Grid, Segment, Image, Message } from 'semantic-ui-react'
 import Tags from '../tags/Tags'
 import axios from 'axios'
+import ProjectList from '../projects/ProjectList'
+import '../styles/projects.css'
 
 const Profile = ({ currentUser, match }) => {
 	const [ user, setUser ] = useState(null)
@@ -11,7 +13,13 @@ const Profile = ({ currentUser, match }) => {
 		axios.get(window._API_URL_ + 'users/' + match.params.username).then((resp) => setUser(resp.data))
 	}, [])
 
-	if (!user) return <div>user does not exist!</div>
+	if (!user)
+		return (
+			<Message style={{ position: 'absolute' }} negative>
+				<Message.Header>User not found</Message.Header>
+				<p>{`User '${match.params.username}' does not exist.`}</p>
+			</Message>
+		)
 
 	return (
 		<Grid className='default-bg' container doubling columns={2}>
@@ -22,7 +30,7 @@ const Profile = ({ currentUser, match }) => {
 					</Segment>
 				</Grid.Column>
 				<Grid.Column width={12}>
-					<Segment>ABOUT ME</Segment>
+					<ProjectList projects={user.projects} />
 				</Grid.Column>
 			</Grid.Row>
 			<Grid.Row>

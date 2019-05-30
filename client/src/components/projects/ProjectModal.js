@@ -20,7 +20,7 @@ const ProjectModal = ({ selectedProject, selectProject }) => {
 	const markdown = selectedProject.markdown ? getHtml(marked(selectedProject.markdown)) : { __html: '' }
 
 	return (
-		<Modal open closeOnDimmerClick closeIcon size='fullscreen' onClose={() => selectProject(null)}>
+		<Modal open closeOnDimmerClick closeIcon size='large' onClose={() => selectProject(null)}>
 			<Modal.Header>{selectedProject.display_name}</Modal.Header>
 			<Modal.Content image>
 				<div>

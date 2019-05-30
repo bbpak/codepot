@@ -1,5 +1,5 @@
 body {
-	height: 100%;
+	height: calc(100% - 50px);
 	overflow-y: auto;
 	background-image: url('gplaypattern_@2X.png');
 	background-repeat: repeat;
@@ -8,7 +8,7 @@ body {
 
 .main-container {
 	background-color: rgba(48, 72, 122, 0.5);
-	min-height: 100vh;
+	min-height: calc(100vh - 50px);
 	overflow-y: auto;
 	padding: 2.5em;
 	margin-top: 50px;
@@ -29,6 +29,17 @@ body {
 
 .default-bg {
 	background-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.markdown-container {
+	margin: 0 0 3em 3em;
+	max-height: 70vh;
+	max-width: 38vw;
+	overflow-y: auto;
+}
+
+.fullscreen.modal {
+	overflow-x: hidden;
 }
 
 a {
