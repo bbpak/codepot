@@ -17,6 +17,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 - Ruby on Rails: https://guides.rubyonrails.org/v5.0/getting_started.html
 - PostgreSQL: https://www.postgresql.org/download/
+- Cloudinary: https://cloudinary.com/
 
 ## Development setup
 
@@ -52,6 +53,8 @@ Then start the React app with this command. Since the Rails API is already runni
 ```sh
 yarn start
 ```
+
+Any `env` variables will have to be replaced with respective GitHub PATs or Cloudinary account variables.
 
 # Usage
 On the client application, the user can log in with GitHub OAuth with the login button in the nav bar at the top. The logged-in user will then be able to create a project from the nav bar.
