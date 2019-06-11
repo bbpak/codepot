@@ -42,6 +42,8 @@ Once the development database is set up on PostgreSQL, run this command to start
 rails s
 ```
 
+The API includes a compiled list of tags including languages, tech stack, and topics that were gathered from other APIs/Web scraping that includes the color associated with the tag. 
+
 ### Client
 
 Install the dependencies for the app with the following command.
@@ -60,6 +62,8 @@ Any `env` variables will have to be replaced with respective GitHub PATs or Clou
 
 # Usage
 On the client application, the user can log in with GitHub OAuth with the login button in the nav bar at the top. The logged-in user will then be able to create a project from the nav bar.
+
+![tag-filter](https://i.imgur.com/EoZIt0v.png)
 
 ## Creating a project
 
