@@ -2,6 +2,8 @@
 
 CRUD (Create, Read, Update, DeletE) Hub is an online platform for sharing and discovering projects. Users can login with GitHub and submit new projects from their available GitHub repositories. Projects can be filtered by the tags which include various languages, tech stack, categories, and topics of the project.
 
+![demo](https://giant.gfycat.com/SmugOffensiveGrizzlybear.gif)
+
 # Built with
 
 - React with Redux
@@ -60,4 +62,7 @@ Any `env` variables will have to be replaced with respective GitHub PATs or Clou
 On the client application, the user can log in with GitHub OAuth with the login button in the nav bar at the top. The logged-in user will then be able to create a project from the nav bar.
 
 ## Creating a project
+
 To create a project, the user will have to select from the dropdown list of the user's public repositories that they own. Selecting a repository will auto-generate the project form with the repository data from GitHub API including the project name, repo URL, the README as the project markdown, and topics and languages for tags. All of these details can be further modified for better presentation.
+
+![create-project](https://i.imgur.com/j92caVn.png)
